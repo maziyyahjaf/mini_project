@@ -1,0 +1,14 @@
+{
+    "/api": {
+        "target": "http://localhost:1471",
+        "secure": false,
+        "changeOrigin": true
+    },
+
+    "/ws": {
+        "target": "http://localhost:1471",
+        "ws": true,
+        "secure": false,
+        "changeOrigin": true
+    }
+}

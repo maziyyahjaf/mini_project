@@ -1,0 +1,62 @@
+{"properties": [
+  {
+    "name": "hivemq.host",
+    "type": "java.lang.String",
+    "description": "A description for 'hivemq.host'"
+  },
+  {
+    "name": "hivemq.username",
+    "type": "java.lang.String",
+    "description": "A description for 'hivemq.username'"
+  },
+  {
+    "name": "hivemq.password",
+    "type": "java.lang.String",
+    "description": "A description for 'hivemq.password'"
+  },
+  {
+    "name": "hivemq.port",
+    "type": "java.lang.String",
+    "description": "A description for 'hivemq.port'"
+  },
+  {
+    "name": "hive.mq.username",
+    "type": "java.lang.String",
+    "description": "A description for 'hive.mq.username'"
+  },
+  {
+    "name": "hive.mq.password",
+    "type": "java.lang.String",
+    "description": "A description for 'hive.mq.password'"
+  },
+  {
+    "name": "local.url",
+    "type": "java.lang.String",
+    "description": "A description for 'local.url'"
+  },
+  {
+    "name": "nlp.api.url",
+    "type": "java.lang.String",
+    "description": "A description for 'nlp.api.url'"
+  },
+  {
+    "name": "telegram.bot.token",
+    "type": "java.lang.String",
+    "description": "A description for 'telegram.bot.token'"
+  },
+  {
+    "name": "telegram.bot.username",
+    "type": "java.lang.String",
+    "description": "A description for 'telegram.bot.username'"
+  },
+  {
+    "name": "telegram.bot.base.url",
+    "type": "java.lang.String",
+    "description": "A description for 'telegram.bot.base.url'"
+  },
+  {
+    "name": "telegram.bot.message.url",
+    "type": "java.lang.String",
+    "description": "A description for 'telegram.bot.message.url'"
+  }
+]}

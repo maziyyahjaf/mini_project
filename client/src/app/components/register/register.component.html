@@ -1,0 +1,19 @@
+<h1>Register</h1>
+
+<form [formGroup]="form" (submit)="onSubmit()">
+    <div>
+        <input type="text" placeholder="Device Id" formControlName="deviceId">
+    </div>
+    <div>
+        <input type="text" placeholder="Name" formControlName="name">
+    </div>
+    <div>
+        <input type="text" placeholder="Email" formControlName="email">
+    </div>
+    <div>
+        <input type="password" placeholder="Password" formControlName="password">
+    </div>
+    <div>
+        <button type="submit">Sign Up</button>
+    </div>
+</form>
