@@ -55,6 +55,9 @@ public class UserService {
 
         // generate the pairing id
         String pairingId = generatePairingId(deviceId, pairedDeviceId);
+
+        // need to get the timezone offset
+        
         userRepository.saveNewlyRegisteredUser(payload, pairedDeviceId, isPairedStatus, telegramLinkingCode, pairingId);
 
         SuccesfulRegistrationResponse succesfulRegistrationResponse = new SuccesfulRegistrationResponse("valid",

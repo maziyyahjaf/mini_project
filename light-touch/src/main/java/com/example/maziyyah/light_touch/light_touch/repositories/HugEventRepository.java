@@ -51,7 +51,7 @@ public class HugEventRepository {
 
     // @Transactional
     public void saveHugEvent(HugEvent event) {
-
+        // check if you need to explicitly set the timestamp to UTC 
         String sql = "INSERT INTO hugEvents(pairing_id, timestamp) VALUES (?, ?)";
         try {
             jdbcTemplate.update(sql, event.getPairingId(), event.getTimestamp());

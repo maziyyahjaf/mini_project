@@ -34,7 +34,7 @@ public class HugEventService {
     public void storeHugEvent(String pairingId) {
         // create a new Hug Event record
 
-        Instant timestamp = Instant.now();
+        Instant timestamp = Instant.now(); // returns the current timestamp in UTC
         HugEvent hugEvent = new HugEvent(pairingId, timestamp);
         hugEventRepository.saveHugEvent(hugEvent);
 

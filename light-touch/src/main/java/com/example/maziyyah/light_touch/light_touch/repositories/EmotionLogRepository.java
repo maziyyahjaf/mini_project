@@ -43,16 +43,18 @@ public class EmotionLogRepository {
         try {
             logger.info("timestamp from payload {}", log.getTimestamp());
 
-            // parse the payload timestamp as an Instant
-            Instant instant = Instant.parse(log.getTimestamp());
+            Timestamp sqlTimestamp = Timestamp.from(Instant.parse(log.getTimestamp()));
 
-            // convert the Instant to ZonedDateTime in UTC
-            ZonedDateTime utcDateTime = instant.atZone(ZoneId.of("UTC"));
+            // // parse the payload timestamp as an Instant
+            // Instant instant = Instant.parse(log.getTimestamp());
 
-            // convert ZonedDateTime to java.sql.timestamp
-            Timestamp sqlTimestamp = Timestamp.valueOf(utcDateTime.toLocalDateTime());
-            logger.info("sql timestamp {}", sqlTimestamp);
-            
+            // // convert the Instant to ZonedDateTime in UTC
+            // ZonedDateTime utcDateTime = instant.atZone(ZoneId.of("UTC"));
+
+            // // convert ZonedDateTime to java.sql.timestamp
+            // Timestamp sqlTimestamp = Timestamp.valueOf(utcDateTime.toLocalDateTime());
+            logger.info("sql timestamp {}", sqlTimestamp.toString());
+
             //save to the db
             jdbcTemplate.update(sql, log.getFirebaseUid(), log.getEmotion(), log.getIntensity(), sqlTimestamp,log.isSendToDevice());
 
