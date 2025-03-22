@@ -1,5 +1,6 @@
 package com.example.maziyyah.light_touch.light_touch.repositories;
 
+import java.sql.ResultSet;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.maziyyah.light_touch.light_touch.exceptions.Devices.ErrorSavingRegistrationDetailsException;
 import com.example.maziyyah.light_touch.light_touch.models.RegistrationPayload;
+import com.example.maziyyah.light_touch.light_touch.models.User;
 
 @Repository
 public class UserRepository {
@@ -46,14 +48,23 @@ public class UserRepository {
 
     private static final String SAVE_NEWLY_REGISTERED_USER = 
             """
-                INSERT INTO users(firebase_user_id, name, email, device_id, paired_device_id, is_paired, telegram_link_code, timezone)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO users(firebase_user_id, name, email, device_id, paired_device_id, is_paired, telegram_link_code, timezone, pairing_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
     // when both user and partner have registered
     private static final String UPDATE_PAIRING_STATUS = 
             """
                 UPDATE users SET is_paired = TRUE WHERE device_id IN (?, ?)
+            """;
+    
+    private static final String FETCH_USER_DETAILS_AFTER_LOGIN = 
+            """
+                SELECT name, email, device_id, paired_device_id, is_paired, 
+                telegram_chat_id, telegram_link_code, timezone, pairing_id
+                FROM users
+                WHERE firebase_user_id = ?
+            
             """;
 
     public void updateDeviceIdAvailability(String deviceId) {
@@ -100,7 +111,7 @@ public class UserRepository {
         jdbcTemplate.update(sql, linkingCode, deviceId);
     }
 
-    public void saveNewlyRegisteredUser(RegistrationPayload payload, String pairedDeviceId, Boolean isPairedStatus, String telegramLinkingCode) {
+    public void saveNewlyRegisteredUser(RegistrationPayload payload, String pairedDeviceId, Boolean isPairedStatus, String telegramLinkingCode, String pairingId) {
         try {
             jdbcTemplate.update(SAVE_NEWLY_REGISTERED_USER,
                                 payload.getFirebaseUid(),
@@ -110,12 +121,23 @@ public class UserRepository {
                                 pairedDeviceId,
                                 isPairedStatus,
                                 telegramLinkingCode,
-                                payload.getTimezone());
+                                payload.getTimezone(),
+                                pairingId);
         } catch (DataAccessException ex) {
             logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
 
             throw new ErrorSavingRegistrationDetailsException("Error saving registration details.");
         }
+    }
+
+    public Optional<User> getUserDetailsByFirebaseUid(String firebaseUid) {
+        return jdbcTemplate.query(FETCH_USER_DETAILS_AFTER_LOGIN, (ResultSet rs) -> {
+            if (rs.next()) {
+                return Optional.of(User.populate(rs));
+            } else {
+                return Optional.empty();
+            }
+        }, firebaseUid);
     }
 
     

@@ -44,10 +44,10 @@ export class WebSocketService {
     );
   }
 
-  subscribeToHugCount(pairId: string, callback: (message: any) => void) {
+  subscribeToHugCount(pairingId: string, callback: (message: any) => void) {
     this.whenConnected().subscribe(() => {
-      console.log(`Now subscribing to /topic/pair/${pairId}/hugs`);
-      this.stompClient.subscribe(`/topic/pair/${pairId}/hugs`, (message) => {
+      console.log(`Now subscribing to /topic/hugs/${pairingId}`);
+      this.stompClient.subscribe(`/topic/hugs/${pairingId}`, (message) => {
         callback(JSON.parse(message.body));
       });
     });

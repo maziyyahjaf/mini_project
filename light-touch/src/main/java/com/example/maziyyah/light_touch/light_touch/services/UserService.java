@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.maziyyah.light_touch.light_touch.exceptions.Devices.PairedDeviceIdNotFoundException;
 import com.example.maziyyah.light_touch.light_touch.models.RegistrationPayload;
+import com.example.maziyyah.light_touch.light_touch.models.SuccesfulRegistrationResponse;
+import com.example.maziyyah.light_touch.light_touch.models.User;
 import com.example.maziyyah.light_touch.light_touch.repositories.UserRepository;
 
 @Service
@@ -27,7 +29,7 @@ public class UserService {
 
 
     @Transactional
-    public String saveUser(RegistrationPayload payload) {
+    public SuccesfulRegistrationResponse saveUser(RegistrationPayload payload) {
         // extract device id from payload
         String deviceId = payload.getDeviceId();
     
@@ -52,10 +54,16 @@ public class UserService {
         String telegramLinkingCode = generateLinkingCode();
 
         // generate the pairing id
-        // String pairingId = generatePairingId(deviceId, pairedDeviceId);
-        userRepository.saveNewlyRegisteredUser(payload, pairedDeviceId, isPairedStatus, telegramLinkingCode);
+        String pairingId = generatePairingId(deviceId, pairedDeviceId);
+        userRepository.saveNewlyRegisteredUser(payload, pairedDeviceId, isPairedStatus, telegramLinkingCode, pairingId);
 
-        return telegramLinkingCode;
+        SuccesfulRegistrationResponse succesfulRegistrationResponse = new SuccesfulRegistrationResponse("valid",
+                                                                                                        "successful registration", 
+                                                                                                        telegramLinkingCode, 
+                                                                                                        pairedDeviceId, 
+                                                                                                        pairingId);
+
+        return succesfulRegistrationResponse;
 
     }
 
@@ -84,6 +92,14 @@ public class UserService {
 
     public void updatePairingStatus(String deviceId, String pairedDeviceId) {
         userRepository.updatePairingStatus(deviceId, pairedDeviceId);
+    }
+
+    private String generatePairingId(String deviceId, String pairedDeviceId) {
+        return deviceId.compareTo(pairedDeviceId) < 0 ? deviceId + "_" + pairedDeviceId : pairedDeviceId + "_" + deviceId;
+    }
+
+    public Optional<User> getUserDetailsByFirebaseUid(String firebaseUid) {
+        return userRepository.getUserDetailsByFirebaseUid(firebaseUid);
     }
 
    

@@ -13,6 +13,8 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 // import jakarta.annotation.PostConstruct;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -115,8 +117,18 @@ public class MQTTService {
         
     }
 
-    public void publishMessage(String deviceId, String message) {
+    public void publishMessage(String deviceId, String emotion, int intensity) {
         String topic = BASE_TOPIC + deviceId + "/mood";
+
+        // Create JSON object
+        JsonObject messageJson = Json.createObjectBuilder()
+                                    .add("emotion", emotion)
+                                    .add("intensity", intensity)
+                                    .build();
+        // Convert JSON object to string
+        String message = messageJson.toString();
+
+        // Publish message
         CompletableFuture<Mqtt3Publish> future = client.publishWith()
                                                 .topic(topic)
                                                 .payload(message.getBytes(UTF_8))
@@ -138,9 +150,11 @@ public class MQTTService {
         Optional<String> pairedDeviceOpt = mqttRepository.getPairedDeviceForDeviceId(deviceID);
         if (pairedDeviceOpt.isEmpty()) {
             logger.error("Paired Device Id not found for device id {}", deviceID);
+            return; // exit method early
         }
 
         String pairedDeviceId = pairedDeviceOpt.get();
+        String pairingId = generatePairingId(deviceID, pairedDeviceId); // create consistent id
 
         hugEventService.logSpontaneousHug(deviceID);
 
@@ -148,7 +162,10 @@ public class MQTTService {
             logger.info("❤️ Simultaneous hug detected between {} and {}!", deviceID, pairedDeviceId);
             publishSimultaneousHugMessage("simultaneous_hug", "true"); // Notify both devices
             // save event to mongo? save how many simultaneous hugs detected? -> maybe use web socket to update dashboard?
-            hugWebSocketService.triggerHugUpdate(deviceID, pairedDeviceId);
+            // store hug event
+            hugEventService.storeHugEvent(pairingId);
+            // update websocket clients
+            hugWebSocketService.triggerHugUpdate(pairingId);
 
         }
 
@@ -228,6 +245,11 @@ public class MQTTService {
                 logger.info("Published to {}: {}", fullTopic, message);
             }
         });
+    }
+
+
+    private String generatePairingId(String deviceId, String pairedDeviceId) {
+        return deviceId.compareTo(pairedDeviceId) < 0 ? deviceId + "_" + pairedDeviceId : pairedDeviceId + "_" + deviceId;
     }
 
 

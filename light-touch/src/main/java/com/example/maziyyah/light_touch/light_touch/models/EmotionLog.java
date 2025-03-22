@@ -1,119 +1,70 @@
 package com.example.maziyyah.light_touch.light_touch.models;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
 
 // import java.util.UUID;
 
 public class EmotionLog {
-    
-    private int emotionLogId;
-    private String userId;
+
+    private String firebaseUid;
+    // private int emotionLogId;
+    private String deviceId;
     private String emotion;
     private int intensity;
-    private String notes;
-    private LocalDateTime createdAt;
-    private boolean sentToDevice = false;
+    // private String notes;
+    // private LocalDateTime createdAt;
+    private String timestamp;
+    private boolean sendToDevice = false;
 
-    
     public EmotionLog() {
     }
 
-
-    public EmotionLog(String userId, String emotion, int intensity, String notes,
-            LocalDateTime createdAt, boolean sentToDevice) {
-        this.userId = userId;
-        this.emotion = emotion;
-        this.intensity = intensity;
-        this.notes = notes;
-        this.createdAt = LocalDateTime.now(); // automatically set timestamp
-        this.sentToDevice = sentToDevice;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-
-    public int getEmotionLogId() {
-        return emotionLogId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
-
-
-    public void setEmotionLogId(int emotionLogId) {
-        this.emotionLogId = emotionLogId;
-    }
-
-
-    public String getUserId() {
-        return userId;
-    }
-
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
 
     public String getEmotion() {
         return emotion;
     }
 
-
     public void setEmotion(String emotion) {
         this.emotion = emotion;
     }
-
 
     public int getIntensity() {
         return intensity;
     }
 
-
     public void setIntensity(int intensity) {
         this.intensity = intensity;
     }
 
-
-    public String getNotes() {
-        return notes;
+    public String getFirebaseUid() {
+        return firebaseUid;
     }
 
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
     }
 
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
-
-    public boolean isSentToDevice() {
-        return sentToDevice;
+    public boolean isSendToDevice() {
+        return sendToDevice;
     }
 
-
-    public void setSentToDevice(boolean sentToDevice) {
-        this.sentToDevice = sentToDevice;
+    public void setSendToDevice(boolean sendToDevice) {
+        this.sendToDevice = sendToDevice;
     }
 
-    
-
-    
-
-    
-
-
-    
-
-    
-
-    
-
-
-
-
-    
 }

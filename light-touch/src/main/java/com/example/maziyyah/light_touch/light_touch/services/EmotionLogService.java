@@ -1,11 +1,14 @@
 package com.example.maziyyah.light_touch.light_touch.services;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.example.maziyyah.light_touch.light_touch.models.Emotion;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionLog;
 import com.example.maziyyah.light_touch.light_touch.repositories.EmotionLogRepository;
 import com.example.maziyyah.light_touch.light_touch.repositories.UserRepository;
@@ -38,25 +41,34 @@ public class EmotionLogService {
 
         }
         
-
         // Publish to device immediately
-        if (log.isSentToDevice()) {
+        if (log.isSendToDevice()) {
             // maybe get the device id from redis instead?
             // for every user id we save the userid -> device id
-            String deviceId = getDeviceIdForUserId(log);
-            mqttService.publishMessage(deviceId, log.getEmotion());
+            // can get deviceId from the client side
+            // use device id to get the firebase uid?
+            String deviceId = log.getDeviceId();
+            if (deviceId.isEmpty()) {
+                deviceId = emotionLogrepository.fetchDeviceIdBasedOnFirebaseUid(log.getFirebaseUid());
+            }
+
+            mqttService.publishMessage(deviceId, log.getEmotion(), log.getIntensity());
         }
 
 
     }
 
-    public String getDeviceIdForUserId(EmotionLog log) {
-        String userId = log.getUserId();
-        return userRepository.getDeviceIdForUserId(userId);
-    }
 
     private void saveEmotionLog(EmotionLog log) {
         emotionLogrepository.saveEmotionLog(log);
+    }
+
+    public Optional<List<Emotion>> getAllEmotions() {
+        List<Emotion> emotions = emotionLogrepository.getAllEmotions();
+        if (emotions != null && !emotions.isEmpty()) {
+            return Optional.of(emotions);
+        }
+        return Optional.empty();
     }
 
 

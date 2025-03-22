@@ -1,13 +1,13 @@
 package com.example.maziyyah.light_touch.light_touch.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.maziyyah.light_touch.light_touch.services.MQTTService;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -21,12 +21,12 @@ public class MqttController {
         this.mqttService = mqttService;
     }
 
-    @PostMapping("/publish")
-    public ResponseEntity<?> publishMoodLog(@RequestParam String message) {
-        mqttService.publishMessage("userA", message);
+    // @PostMapping("/publish")
+    // public ResponseEntity<?> publishMoodLog(@RequestParam String message) {
+    //     mqttService.publishMessage("userA", message);
         
-        return ResponseEntity.ok().body("published");
-    }
+    //     return ResponseEntity.ok().body("published");
+    // }
     
     
     

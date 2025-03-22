@@ -8,12 +8,13 @@ import { RegisterComponent } from './components/register/register.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
+import { browserSessionPersistence, getAuth, provideAuth, setPersistence } from '@angular/fire/auth';
 import { environment } from '../environments/environment.development';
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SuccessRegistrationComponent } from './components/success-registration/success-registration.component';
 import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.component';
+import { EmotionLogComponent } from './components/emotion-log/emotion-log.component';
 
 
 // firebase initialization function
@@ -31,12 +32,14 @@ import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.compon
     LoginComponent,
     RegisterComponent,
     SuccessRegistrationComponent,
-    HugTrackerComponent
+    HugTrackerComponent,
+    EmotionLogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    
     
   ],
   providers: [ provideHttpClient(withInterceptorsFromDi()),
@@ -46,7 +49,7 @@ import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.compon
     //   multi: true
     // },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
+    provideAuth(() =>getAuth()),
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

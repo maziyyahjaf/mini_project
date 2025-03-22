@@ -2,6 +2,7 @@ package com.example.maziyyah.light_touch.light_touch.utils;
 
 import java.io.StringReader;
 
+import com.example.maziyyah.light_touch.light_touch.models.EmotionLog;
 import com.example.maziyyah.light_touch.light_touch.models.RegistrationPayload;
 
 import jakarta.json.Json;
@@ -33,5 +34,29 @@ public class Utils {
         RegistrationPayload registrationPayload = new RegistrationPayload(firebaseUid, name, email, deviceId, timezone);
         return registrationPayload;
     }
+
+    public static EmotionLog toEmotionLog(String payload, String firebaseUid) {
+        JsonReader jsonReader = Json.createReader(new StringReader(payload));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        int intensity = jsonObject.getInt("intensity");
+        String deviceId =  jsonObject.getString("deviceId");
+        String emotion = jsonObject.getString("emotion");
+        String timestamp = jsonObject.getString("timestamp");
+        boolean sendToDevice = jsonObject.getBoolean("sendToDevice");
+
+        EmotionLog emotionLog = new EmotionLog();
+        emotionLog.setFirebaseUid(firebaseUid);
+        emotionLog.setDeviceId(deviceId);
+        emotionLog.setEmotion(emotion);
+        emotionLog.setIntensity(intensity);
+        emotionLog.setTimestamp(timestamp);
+        emotionLog.setSendToDevice(sendToDevice);
+
+        return emotionLog;
+
+    }
+
+
     
 }
