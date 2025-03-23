@@ -30,3 +30,13 @@ export interface EmotionLogResponse {
     sendToDevice: boolean;
     notes?: string;
 }
+
+export interface EmotionLogUpdate {
+    deviceId: string;
+    emotionLogId: number;
+    emotion: string;
+    intensity: number;
+    timestamp: string;
+    sendToDevice: boolean;
+    notes?: string;
+}

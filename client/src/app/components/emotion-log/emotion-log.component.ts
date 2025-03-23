@@ -31,7 +31,8 @@ export class EmotionLogComponent implements OnInit {
       // emotion comes from backend?? 
       emotion: this.fb.control<string>('', [Validators.required]), 
       intensity: this.fb.control<number>(3, [Validators.min(1), Validators.max(5)]),
-      sendToDevice: this.fb.control<boolean>(false)
+      sendToDevice: this.fb.control<boolean>(false),
+      notes: this.fb.control<string>('')
     })
   }
 
@@ -46,7 +47,8 @@ export class EmotionLogComponent implements OnInit {
       emotion: this.emotionLogForm.get('emotion')?.value,
       intensity: this.emotionLogForm.get('intensity')?.value,
       sendToDevice: this.emotionLogForm.get("sendToDevice")?.value,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      notes: this.emotionLogForm.get('notes')?.value
     };
 
     this.emotionLogService.saveEmotionLog(emotionLog).subscribe({

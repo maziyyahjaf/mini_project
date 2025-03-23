@@ -44,6 +44,7 @@ public class Utils {
         String emotion = jsonObject.getString("emotion");
         String timestamp = jsonObject.getString("timestamp");
         boolean sendToDevice = jsonObject.getBoolean("sendToDevice");
+        String notes = jsonObject.getString("notes");
 
         EmotionLog emotionLog = new EmotionLog();
         emotionLog.setFirebaseUid(firebaseUid);
@@ -52,6 +53,7 @@ public class Utils {
         emotionLog.setIntensity(intensity);
         emotionLog.setTimestamp(timestamp);
         emotionLog.setSendToDevice(sendToDevice);
+        emotionLog.setNotes(notes);
 
         return emotionLog;
 

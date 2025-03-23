@@ -16,6 +16,7 @@ public class EmotionLogDTO {
     private int intensity;
     private LocalDateTime timestamp; // This would be the converted timestamp
     private boolean sendToDevice;
+    private String notes;
 
 
     public int getEmotionLogId() {
@@ -55,15 +56,26 @@ public class EmotionLogDTO {
         this.sendToDevice = sendToDevice;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    
+
     public static EmotionLogDTO populate(ResultSet rs) throws SQLException {
         EmotionLogDTO dto = new EmotionLogDTO();
         dto.setEmotionLogId(rs.getInt("log_id"));
         dto.setFirebaseUid(rs.getString("firebase_user_id"));
         dto.setEmotion(rs.getString("emotion"));
+        dto.setIntensity(rs.getInt("intensity"));
         Timestamp sqlTimestamp = rs.getTimestamp("local_timestamp");
         LocalDateTime timestamp = sqlTimestamp.toLocalDateTime();
         dto.setTimestamp(timestamp);
         dto.setSendToDevice(rs.getBoolean("send_to_device"));
+        dto.setNotes(rs.getString("notes"));
 
         return dto;
 
@@ -76,9 +88,11 @@ public class EmotionLogDTO {
                             .add("intensity", getIntensity())
                             .add("timestamp", getTimestamp().toString())
                             .add("sendToDevice", isSendToDevice())
+                            .add("notes", getNotes())
                             .build();
         return json;
     }
+    
 
 
     

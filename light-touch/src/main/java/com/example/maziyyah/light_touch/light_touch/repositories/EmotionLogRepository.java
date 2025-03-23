@@ -39,7 +39,7 @@ public class EmotionLogRepository {
     
     // save emotion log to mySQL
     public void saveEmotionLog(EmotionLog log) {
-        String sql = "INSERT INTO emotion_logs (firebase_user_id, emotion, intensity, timestamp, send_to_device) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO emotion_logs (firebase_user_id, emotion, intensity, timestamp, send_to_device, notes) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             logger.info("timestamp from payload {}", log.getTimestamp());
 
@@ -56,7 +56,7 @@ public class EmotionLogRepository {
             logger.info("sql timestamp {}", sqlTimestamp.toString());
 
             //save to the db
-            jdbcTemplate.update(sql, log.getFirebaseUid(), log.getEmotion(), log.getIntensity(), sqlTimestamp,log.isSendToDevice());
+            jdbcTemplate.update(sql, log.getFirebaseUid(), log.getEmotion(), log.getIntensity(), sqlTimestamp,log.isSendToDevice(), log.getNotes());
 
         } catch (DataAccessException ex) {
             logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
@@ -64,6 +64,9 @@ public class EmotionLogRepository {
             throw new RuntimeException("Database error: Unable to save emotion log.");
         }
     }
+
+
+    // public void updateEmotionLog()
 
 
     // fetch device id based on firebase user id

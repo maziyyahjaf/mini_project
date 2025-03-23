@@ -173,7 +173,8 @@ public class EmotionInsightsRepository {
             "emotion, " +
             "intensity, " +
             "CONVERT_TZ(timestamp, @@session.time_zone, ?) AS local_timestamp, " +
-            "send_to_device " +
+            "send_to_device, " +
+            "notes " +
             "FROM emotion_logs " +
             "WHERE log_id IN (%s) " +
             "AND firebase_user_id = ?", placeholders);
@@ -197,5 +198,26 @@ public class EmotionInsightsRepository {
             }
 
 
+    }
+
+    public Optional<List<EmotionWeeklyPatternDTO>> getWeeklyPatternWithLogIDsCompleteWeek(String timezoneOffset, String firebaseUid) {
+        List<EmotionWeeklyPatternDTO> weeklyPatternList = new ArrayList<>();
+
+        try {
+            weeklyPatternList = jdbcTemplate.query(
+                EmotionInsightsQueries.WEEKLY_PATTERN_WITH_LOG_ID_COMPLETE_WEEK,
+                (rs, rowNum) -> EmotionWeeklyPatternDTO.populate(rs),
+                timezoneOffset,
+                firebaseUid,
+                timezoneOffset,
+                timezoneOffset
+            );
+            return weeklyPatternList.isEmpty() ? Optional.empty() : Optional.of(weeklyPatternList);
+
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error retrieving weekly pattern from MySQL for user: {}", firebaseUid, ex);
+            throw new RuntimeException("Database error: Unable to retrieve weekly pattern.");
+        }
     }
 }

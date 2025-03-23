@@ -131,4 +131,22 @@ public class EmotionInsightsQueries {
              AND firebase_user_id = ?
                 
         """;
+
+
+    public static final String WEEKLY_PATTERN_WITH_LOG_ID_COMPLETE_WEEK = 
+        """
+            SELECT DAYNAME(CONVERT_TZ(el.timestamp, @@session.time_zone, ?)) AS day_of_week,
+            el.emotion,
+            COUNT(el.log_id) AS frequency,
+            JSON_ARRAYAGG(el.log_id) AS log_ids
+            FROM emotion_logs el
+            WHERE el.firebase_user_id = ?
+            AND CONVERT_TZ(el.timestamp, @@session.time_zone, ?) >= 
+                DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)
+            AND CONVERT_TZ(el.timestamp, @@session.time_zone, ?) < 
+                DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY)
+            GROUP BY day_of_week, el.emotion
+            ORDER BY FIELD(day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+            frequency DESC
+     """;
 }

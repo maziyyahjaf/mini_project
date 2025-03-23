@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { EmotionLog, EmotionWeeklyPattern } from '../../models/emotion.model';
+import { EmotionLog, EmotionLogResponse, EmotionWeeklyPattern } from '../../models/emotion.model';
 import { EmotionInsightsService } from '../../services/emotion-insights.service';
 
 @Component({
@@ -11,7 +11,8 @@ import { EmotionInsightsService } from '../../services/emotion-insights.service'
 export class WeeklyPatternComponent implements OnInit{
   
   weeklyPatterns: EmotionWeeklyPattern[] = [];
-  selectedLogs: EmotionLog[] = [];
+  selectedLogs: EmotionLogResponse[] = [];
+  selectedPattern: EmotionWeeklyPattern | null = null;
   isDetailsModalOpen = false;
   isLoading = true;
   error: string | null = null;
@@ -38,6 +39,38 @@ export class WeeklyPatternComponent implements OnInit{
 
   }
 
+  // Calculate percentages for each day
+  get patternsByDayWithPercentage(): { [day: string]: (EmotionWeeklyPattern & { percentage: number, heightStyle: string })[] } {
+    const result: { [day: string]: (EmotionWeeklyPattern & { percentage: number, heightStyle: string })[] } = {};
+    
+    // Calculate percentages for each day
+    for (const day in this.patternsByDay) {
+      const patterns = this.patternsByDay[day];
+      const totalFrequency = patterns.reduce((sum, pattern) => sum + pattern.frequency, 0);
+      
+      // Add percentage to each pattern
+      result[day] = patterns.map(pattern => {
+        const percentage = totalFrequency > 0 ? (pattern.frequency / totalFrequency) * 100 : 0;
+        
+        // Calculate height based on percentage (minimum height of 40px for visibility)
+        // This sets the height as a percentage of the container height
+        const heightStyle = totalFrequency > 0 ? 
+          `height: ${Math.max(percentage, 5)}%;` : 
+          'height: auto;';
+        
+        return {
+          ...pattern,
+          percentage,
+          heightStyle
+        };
+      }).sort((a, b) => b.frequency - a.frequency); // Sort by frequency descending
+    }
+    
+    return result;
+  }
+
+
+
   ngOnInit(): void {
     this.loadWeeklyPatterns();
   }
@@ -55,7 +88,7 @@ export class WeeklyPatternComponent implements OnInit{
         this.isLoading = false;
         console.error(error);
       }
-    })
+    });
   }
 
   showDetails(pattern: EmotionWeeklyPattern): void {
@@ -64,16 +97,16 @@ export class WeeklyPatternComponent implements OnInit{
       return;
     }
 
-    // this.insightsService.getEmotionLogsByIds(pattern.logIds)
-    //   .subscribe({
-    //     next: (logs) => {
-    //       this.selectedLogs = logs;
-    //       this.isDetailsModalOpen = true;
-    //     },
-    //     error: (err) => {
-    //       console.error('Failed to load emotion log details', err);
-    //     }
-    //   });
+    this.insightsService.getEmotionLogsByIds(pattern.logIds)
+      .subscribe({
+        next: (logs) => {
+          this.selectedLogs = logs;
+          this.isDetailsModalOpen = true;
+        },
+        error: (err) => {
+          console.error('Failed to load emotion log details', err);
+        }
+      });
   }
 
   closeDetailsModal(): void {
@@ -82,18 +115,34 @@ export class WeeklyPatternComponent implements OnInit{
 
   // Helper for getting emotion color classes
   getEmotionColorClass(emotion: string): string {
-    // Map emotions to color classes
+    // Map emotions to Tailwind color classes
     const emotionColors: { [key: string]: string } = {
       'happy': 'bg-yellow-200',
-      'sad': 'bg-blue-200',
-      'Angry': 'bg-red-200',
-      'anxious': 'bg-purple-200',
-      'calm': 'bg-green-200'
+      'sad': 'bg-indigo-200',
+      'anxious': 'bg-orange-200',
+      'stressed': 'bg-red-200',
+      'calm': 'bg-blue-200',
+      'excited': 'bg-green-200',
+      'love': 'bg-magenta-200',
+      'longing': 'bg-pink-200'
       // Add more emotions as needed
     };
     
-    return emotionColors[emotion] || 'bg-gray-200';
+    return emotionColors[emotion.toLowerCase()] || 'bg-gray-200';
   }
+
+  // Get the total frequency for a day
+  getDayTotal(day: string): number {
+    return this.patternsByDay[day].reduce((sum, pattern) => sum + pattern.frequency, 0);
+  }
+
+  // Handle log updates from the details component
+  onLogUpdated(updatedLog: EmotionLogResponse): void {
+    // Refresh weekly patterns to reflect any changes
+    this.loadWeeklyPatterns();
+  }
+
+  
 
 
 }

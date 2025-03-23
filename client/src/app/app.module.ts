@@ -16,6 +16,7 @@ import { SuccessRegistrationComponent } from './components/success-registration/
 import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.component';
 import { EmotionLogComponent } from './components/emotion-log/emotion-log.component';
 import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-pattern.component';
+import { EmotionLogDetailsComponent } from './components/emotion-log-details/emotion-log-details.component';
 
 
 // firebase initialization function
@@ -35,7 +36,8 @@ import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-patte
     SuccessRegistrationComponent,
     HugTrackerComponent,
     EmotionLogComponent,
-    WeeklyPatternComponent
+    WeeklyPatternComponent,
+    EmotionLogDetailsComponent
   ],
   imports: [
     BrowserModule,

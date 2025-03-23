@@ -15,7 +15,7 @@ public class EmotionLog {
     private String timestamp;
     private boolean sendToDevice = false;
     private String deviceId; // yes you need this.. (but currently not in db)
-    //private int emotionLogId; // new -> in db
+    private int emotionLogId; // new -> in db
     private String notes; // new -> currently not in db
 
     public EmotionLog() {
@@ -69,13 +69,13 @@ public class EmotionLog {
         this.sendToDevice = sendToDevice;
     }
 
-    // public int getEmotionLogId() {
-    //     return emotionLogId;
-    // }
+    public int getEmotionLogId() {
+        return emotionLogId;
+    }
 
-    // public void setEmotionLogId(int emotionLogId) {
-    //     this.emotionLogId = emotionLogId;
-    // }
+    public void setEmotionLogId(int emotionLogId) {
+        this.emotionLogId = emotionLogId;
+    }
 
     public String getNotes() {
         return notes;

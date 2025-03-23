@@ -50,7 +50,7 @@ CREATE TABLE emotion_logs(
     intensity INT DEFAULT 3 CHECK (intensity BETWEEN 1 AND 5), -- intensity affects brightness/vibration
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     sent_to_device BOOLEAN DEFAULT FALSE,
-     -- notes TEXT NULL,
+    notes TEXT NULL,
 
     CONSTRAINT pk_log_id primary key(log_id),
     CONSTRAINT fk_firebase_user_id foreign key(firebase_user_id) REFERENCES users(firebase_user_id) ON DELETE CASCADE

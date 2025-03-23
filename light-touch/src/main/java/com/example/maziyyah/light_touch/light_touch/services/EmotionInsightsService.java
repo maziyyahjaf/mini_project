@@ -30,6 +30,12 @@ public class EmotionInsightsService {
 
     }
 
+    public Optional<List<EmotionWeeklyPatternDTO>> getWeeklyPatternWithLogIDsCompleteWeek(String firebaseUid) {
+        String timezoneOffset = getCurrentOffsetForUser(firebaseUid);
+        // int numOfDays = 7; // do i make this dynamic??
+        return emotionInsightsRepository.getWeeklyPatternWithLogIDsCompleteWeek(timezoneOffset, firebaseUid);
+    }
+
     public Optional<List<EmotionWeeklyPatternDTO>> getWeeklyPatternWithLogIDs(String firebaseUid) {
         String timezoneOffset = getCurrentOffsetForUser(firebaseUid);
         int numOfDays = 7; // do i make this dynamic??

@@ -49,8 +49,8 @@ public class EmotionInsightsController {
          logger.info("Authenticated User in weekly pattern: {}", authentication.getPrincipal());
          logger.info("User Authorities in weekly pattern: {}", authentication.getAuthorities());
 
-        Optional<List<EmotionWeeklyPatternDTO>> weeklyPatternsOpt = emotionInsightsService.getWeeklyPatternWithLogIDs(firebaseUid);
-
+        // Optional<List<EmotionWeeklyPatternDTO>> weeklyPatternsOpt = emotionInsightsService.getWeeklyPatternWithLogIDs(firebaseUid);
+        Optional<List<EmotionWeeklyPatternDTO>> weeklyPatternsOpt = emotionInsightsService.getWeeklyPatternWithLogIDsCompleteWeek(firebaseUid);
         if (weeklyPatternsOpt.isPresent() && !weeklyPatternsOpt.get().isEmpty()) {
             return ResponseEntity.ok().body(weeklyPatternsOpt.get());
         } else {
@@ -88,7 +88,6 @@ public class EmotionInsightsController {
 
         if (emotionLogsOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
-
         }
 
         List<EmotionLogDTO> emotionLogs = emotionLogsOpt.get();
@@ -99,12 +98,7 @@ public class EmotionInsightsController {
         }
 
         JsonArray jsonArray = jab.build();
-
         return ResponseEntity.ok().body(jsonArray.toString());
-
-
-    
-        
         
     }
 

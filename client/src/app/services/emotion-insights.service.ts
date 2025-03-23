@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EmotionWeeklyPattern } from '../models/emotion.model';
+import { EmotionLogResponse, EmotionWeeklyPattern } from '../models/emotion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,13 @@ export class EmotionInsightsService {
   http = inject(HttpClient);
 
   getWeeklyPattern(): Observable<EmotionWeeklyPattern[]> {
-    return this.http.get<EmotionWeeklyPattern[]>(`${this.baseUrl}/weekly`)
+    return this.http.get<EmotionWeeklyPattern[]>(`${this.baseUrl}/weekly`);
   }
   
-  // need to implemeny get emotion logs by id
+  // need to implement get emotion logs by id
+  getEmotionLogsByIds(logIds: number[]): Observable<EmotionLogResponse[]> {
+    return this.http.post<EmotionLogResponse[]>(`${this.baseUrl}/logs-by-ids`, {logIds});
+  }
+
 
 }

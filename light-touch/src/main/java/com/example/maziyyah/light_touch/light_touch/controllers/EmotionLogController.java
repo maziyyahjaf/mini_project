@@ -10,7 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,5 +101,19 @@ public class EmotionLogController {
     }
     
     // okay now 
+    // this is for saving the updated log
+    @PutMapping(path = "/log/{logId}")
+    public ResponseEntity<?> saveUpdatedLog(@PathVariable("logId") String logId, @RequestBody String payload) {
+        // Retrieve the authenticated user's Firebase UID
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String firebaseUid = (String) authentication.getPrincipal();
+        logger.info("Authenticated user UID: {}", firebaseUid);
+        logger.info("Authenticated User in update logEmotion: {}", authentication.getPrincipal());
+        logger.info("User Authorities in updated logEmotion: {}", authentication.getAuthorities());
+
+
+        return null;
+
+    }
     
 }
