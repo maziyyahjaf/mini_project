@@ -15,6 +15,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SuccessRegistrationComponent } from './components/success-registration/success-registration.component';
 import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.component';
 import { EmotionLogComponent } from './components/emotion-log/emotion-log.component';
+import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-pattern.component';
 
 
 // firebase initialization function
@@ -33,7 +34,8 @@ import { EmotionLogComponent } from './components/emotion-log/emotion-log.compon
     RegisterComponent,
     SuccessRegistrationComponent,
     HugTrackerComponent,
-    EmotionLogComponent
+    EmotionLogComponent,
+    WeeklyPatternComponent
   ],
   imports: [
     BrowserModule,

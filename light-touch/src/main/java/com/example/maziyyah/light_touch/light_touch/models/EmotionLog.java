@@ -1,5 +1,8 @@
 package com.example.maziyyah.light_touch.light_touch.models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 // import java.time.LocalDateTime;
 
 // import java.util.UUID;
@@ -7,14 +10,13 @@ package com.example.maziyyah.light_touch.light_touch.models;
 public class EmotionLog {
 
     private String firebaseUid;
-    // private int emotionLogId;
-    private String deviceId;
     private String emotion;
     private int intensity;
-    // private String notes;
-    // private LocalDateTime createdAt;
     private String timestamp;
     private boolean sendToDevice = false;
+    private String deviceId; // yes you need this.. (but currently not in db)
+    //private int emotionLogId; // new -> in db
+    private String notes; // new -> currently not in db
 
     public EmotionLog() {
     }
@@ -66,5 +68,25 @@ public class EmotionLog {
     public void setSendToDevice(boolean sendToDevice) {
         this.sendToDevice = sendToDevice;
     }
+
+    // public int getEmotionLogId() {
+    //     return emotionLogId;
+    // }
+
+    // public void setEmotionLogId(int emotionLogId) {
+    //     this.emotionLogId = emotionLogId;
+    // }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+   
+
+    
 
 }

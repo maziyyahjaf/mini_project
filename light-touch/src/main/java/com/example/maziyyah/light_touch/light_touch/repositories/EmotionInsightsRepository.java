@@ -2,6 +2,7 @@ package com.example.maziyyah.light_touch.light_touch.repositories;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,10 +13,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.example.maziyyah.light_touch.light_touch.models.EmotionLogDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionAvgIntensityDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionDeviceDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionFrequencyDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionTimeOfDayDTO;
+import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionWeeklyPatternDTO;
 import com.example.maziyyah.light_touch.light_touch.repositories.Queries.EmotionInsightsQueries;
 
 @Repository
@@ -120,5 +123,79 @@ public class EmotionInsightsRepository {
 
         }
     }
+
+    public Optional<List<EmotionWeeklyPatternDTO>> getWeeklyPatternWithLogIDs(String timezoneOffset, String firebaseUid, int numOfdays) {
+        List<EmotionWeeklyPatternDTO> weeklyPatternList = new ArrayList<>();
+
+        try {
+            weeklyPatternList = jdbcTemplate.query(
+                EmotionInsightsQueries.WEEKLY_PATTERN_WITH_LOG_ID,
+                (rs, rowNum) -> EmotionWeeklyPatternDTO.populate(rs),
+                timezoneOffset,
+                firebaseUid,
+                timezoneOffset,
+                numOfdays
+            );
+            return weeklyPatternList.isEmpty() ? Optional.empty() : Optional.of(weeklyPatternList);
+
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error retrieving weekly pattern from MySQL for user: {}", firebaseUid, ex);
+            throw new RuntimeException("Database error: Unable to retrieve weekly pattern.");
+        }
+    }
+
+    public Optional<EmotionLogDTO> getEmotionLogById(String timezoneOffset, String logId, String firebaseUid) {
+        // get a single log first
+        // maybe can get the front end to send the time zone info -> but no..if they are in a different place..
+        // the offset wont be the same as when they registered -> so get the timezone from where they registered..
+        return jdbcTemplate.query(EmotionInsightsQueries.GET_LOG_BY_ID, (ResultSet rs) -> {
+            if (rs.next()) {
+                return Optional.of(EmotionLogDTO.populate(rs));
+            } else {
+                return Optional.empty();
+            }
+        }, timezoneOffset, logId, firebaseUid);
+
+    }
     
+    public Optional<List<EmotionLogDTO>> getListOfEmotionLogsByIds(String timezoneOffset, List<Integer> logIdList, String firebaseUid) {
+
+        if (logIdList == null || logIdList.isEmpty()) {
+            return Optional.empty(); // nothing to query
+        }
+        // create placeholder for prepared statement IN clause
+        String placeholders = String.join(",", Collections.nCopies(logIdList.size(), "?"));
+
+        String sql = String.format(
+            "SELECT log_id, " +
+            "firebase_user_id, " +
+            "emotion, " +
+            "intensity, " +
+            "CONVERT_TZ(timestamp, @@session.time_zone, ?) AS local_timestamp, " +
+            "send_to_device " +
+            "FROM emotion_logs " +
+            "WHERE log_id IN (%s) " +
+            "AND firebase_user_id = ?", placeholders);
+
+            // Build parameters list: [timezone, logId1, logId2, ..., firebaseUid]
+            List<Object> params = new ArrayList<>();
+            params.add(timezoneOffset);
+            params.addAll(logIdList);
+            params.add(firebaseUid);
+
+            Object[] args = params.toArray(); 
+
+            try {
+                List<EmotionLogDTO> results = jdbcTemplate.query(sql,(rs, rowNum) -> EmotionLogDTO.populate(rs), args);
+                return results.isEmpty() ? Optional.empty() : Optional.of(results);
+
+            } catch (DataAccessException ex) {
+                logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+                logger.error("Error retrieving emotion logs by IDs", ex);
+                return Optional.empty();
+            }
+
+
+    }
 }

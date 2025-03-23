@@ -47,7 +47,7 @@ public class EmotionWeeklyPatternDTO {
     }
    
 
-    public EmotionWeeklyPatternDTO populate(ResultSet rs) throws SQLException {
+    public static EmotionWeeklyPatternDTO populate(ResultSet rs) throws SQLException {
         EmotionWeeklyPatternDTO dto = new EmotionWeeklyPatternDTO();
         dto.setDayOfWeek(rs.getString("day_of_week"));
         dto.setEmotion(rs.getString("emotion"));
@@ -59,7 +59,7 @@ public class EmotionWeeklyPatternDTO {
         return dto;
     }
 
-    private List<Integer> parseLogIds(String logIdsJson) {
+    private static List<Integer> parseLogIds(String logIdsJson) {
         List<Integer> logIdList = new ArrayList<>();
         JsonReader jsonReader = Json.createReader(new StringReader(logIdsJson));
         JsonArray jsonArray = jsonReader.readArray();

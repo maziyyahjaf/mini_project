@@ -15,9 +15,18 @@ export interface Emotion {
     displayOrder: number;
 }
 
-export interface EmotionWeeklyPatter {
+export interface EmotionWeeklyPattern {
     dayOfWeek: string;
     emotion: string;
     frequency: number;
     logIds: number[];
+}
+
+export interface EmotionLogResponse {
+    emotionLogId: number;
+    emotion: string;
+    intensity: number;
+    timestamp: string;
+    sendToDevice: boolean;
+    notes?: string;
 }

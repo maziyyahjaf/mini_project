@@ -118,4 +118,17 @@ public class EmotionInsightsQueries {
                 AND CONVERT_TZ(el.timestamp, @@session.time_zone, ?) >= CURDATE() - INTERVAL ? DAY
                 GROUP BY time_of_day, el.emotion
             """;
+
+    public static final String GET_LOG_BY_ID =
+        """
+            SELECT log_id, 
+                    firebase_user_id,
+                    emotion,
+                    intensity,
+                    CONVERT_TZ(timestamp, @@session.time_zone, ?) AS local_timestamp,
+                    send_to_device
+             FROM emotion_logs WHERE log_id = ?
+             AND firebase_user_id = ?
+                
+        """;
 }
