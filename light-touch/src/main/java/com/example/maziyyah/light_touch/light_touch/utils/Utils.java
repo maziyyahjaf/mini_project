@@ -59,6 +59,30 @@ public class Utils {
 
     }
 
+    public static EmotionLog toUpdatedEmotionLog(String payload) {
+        JsonReader jsonReader = Json.createReader(new StringReader(payload));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        String deviceId =  jsonObject.getString("deviceId");
+        int emotionLogId = jsonObject.getJsonNumber("emotionLogId").intValue();
+        String emotion = jsonObject.getString("emotion");
+        int intensity = jsonObject.getInt("intensity");
+        String timestamp = jsonObject.getString("timestamp");
+        boolean sendToDevice = jsonObject.getBoolean("sendToDevice");
+        String notes = jsonObject.getString("notes");
+
+        EmotionLog emotionLog = new EmotionLog();
+        emotionLog.setDeviceId(deviceId);
+        emotionLog.setEmotionLogId(emotionLogId);
+        emotionLog.setEmotion(emotion);
+        emotionLog.setIntensity(intensity);
+        emotionLog.setTimestamp(timestamp);
+        emotionLog.setSendToDevice(sendToDevice);
+        emotionLog.setNotes(notes);
+
+        return emotionLog;
+    }
+
 
     
 }

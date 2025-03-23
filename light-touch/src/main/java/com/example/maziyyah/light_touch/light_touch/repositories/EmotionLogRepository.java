@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -44,15 +42,7 @@ public class EmotionLogRepository {
             logger.info("timestamp from payload {}", log.getTimestamp());
 
             Timestamp sqlTimestamp = Timestamp.from(Instant.parse(log.getTimestamp()));
-
-            // // parse the payload timestamp as an Instant
-            // Instant instant = Instant.parse(log.getTimestamp());
-
-            // // convert the Instant to ZonedDateTime in UTC
-            // ZonedDateTime utcDateTime = instant.atZone(ZoneId.of("UTC"));
-
-            // // convert ZonedDateTime to java.sql.timestamp
-            // Timestamp sqlTimestamp = Timestamp.valueOf(utcDateTime.toLocalDateTime());
+;
             logger.info("sql timestamp {}", sqlTimestamp.toString());
 
             //save to the db
@@ -66,7 +56,21 @@ public class EmotionLogRepository {
     }
 
 
-    // public void updateEmotionLog()
+    public void updateEmotionLog(EmotionLog log) {
+        String sql = "UPDATE emotion_logs SET emotion = ?, intensity = ?, timestamp = ?, send_to_device = ?, notes = ? WHERE log_id = ?";
+
+        try {
+
+            Timestamp sqlTimestamp = Timestamp.from(Instant.parse(log.getTimestamp()));
+            jdbcTemplate.update(sql, log.getEmotion(), log.getIntensity(), sqlTimestamp, log.isSendToDevice(), log.getNotes(), log.getEmotionLogId());
+
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error saving updated emotion log to MySQL for user: {}, device id: {}", log.getFirebaseUid(), log.getDeviceId(), ex);
+            throw new RuntimeException("Database error: Unable to save updated emotion log.");
+
+        }
+    }
 
 
     // fetch device id based on firebase user id
@@ -109,6 +113,11 @@ public class EmotionLogRepository {
             // log.setSentToDevice(rs.getBoolean("sent_to_device"));
             return log;
         }
+    }
+
+    public String fetchUserTimeZone(String firebaseUid) {
+        String sql = "SELECT timezone FROM users WHERE firebase_user_id = ?";
+        return jdbcTemplate.queryForObject(sql, String.class, firebaseUid);
     }
 }
 

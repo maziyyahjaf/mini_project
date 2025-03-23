@@ -10,6 +10,7 @@ import { EmotionLogResponse } from '../../models/emotion.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmotionInsightsService } from '../../services/emotion-insights.service';
 import { EmotionStore } from '../../store/emotion.store';
+import { EmotionLogService } from '../../services/emotion-log.service';
 
 @Component({
   selector: 'app-emotion-log-details',
@@ -36,7 +37,8 @@ export class EmotionLogDetailsComponent implements OnInit {
   // need to add notes in my backend??
 
   fb = inject(FormBuilder);
-  emotionService = inject(EmotionInsightsService);
+  emotionLogService = inject(EmotionLogService);
+ 
 
   ngOnInit(): void {
     this.editForm = this.createEditForm();
@@ -158,6 +160,24 @@ export class EmotionLogDetailsComponent implements OnInit {
 
       console.log(updatedLog);
       // call service to update log
+      this.emotionLogService.updateEmotionLog(updatedLog).subscribe({
+        next: (response) => {
+          // find and update the log in the logs array
+          const index = this.logs.findIndex(l => l.emotionLogId === updatedLog.emotionLogId);
+          if (index !== -1) {
+            this.logs[index] = response;
+          }
+
+          this.isEditModalOpen = false;
+          this.currentEditLog = null;
+          this.logUpdated.emit(response);
+
+        },
+        error: (err) => {
+          console.error('Failed to update emotion log', err);
+        }
+      })
+
     }
   }
 }

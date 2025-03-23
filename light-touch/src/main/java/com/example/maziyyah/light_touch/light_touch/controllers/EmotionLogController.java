@@ -1,5 +1,8 @@
 package com.example.maziyyah.light_touch.light_touch.controllers;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,12 +24,15 @@ import org.springframework.security.core.Authentication;
 import com.example.maziyyah.light_touch.light_touch.models.ApiResponse;
 import com.example.maziyyah.light_touch.light_touch.models.Emotion;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionLog;
+import com.example.maziyyah.light_touch.light_touch.models.EmotionLogDTO;
 import com.example.maziyyah.light_touch.light_touch.services.EmotionLogService;
 import com.example.maziyyah.light_touch.light_touch.utils.Utils;
+
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
 
 @RestController
 @RequestMapping("/api/emotions")
@@ -111,8 +117,31 @@ public class EmotionLogController {
         logger.info("Authenticated User in update logEmotion: {}", authentication.getPrincipal());
         logger.info("User Authorities in updated logEmotion: {}", authentication.getAuthorities());
 
+        EmotionLog emotionLog = Utils.toUpdatedEmotionLog(payload);
 
-        return null;
+        try {
+            emotionLogService.saveUpdatedLogAndPublishToDevice(emotionLog);
+
+            EmotionLogDTO dto = new EmotionLogDTO();
+            dto.setEmotionLogId(emotionLog.getEmotionLogId());
+            dto.setEmotion(emotionLog.getEmotion());
+            dto.setIntensity(emotionLog.getIntensity());
+            // need to get timezone for user..
+            String timezone = emotionLogService.fetchUserTimezone(firebaseUid);
+            Instant instant = Instant.parse(emotionLog.getTimestamp());
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.of(timezone));
+            dto.setTimestamp(localDateTime);
+            dto.setSendToDevice(emotionLog.isSendToDevice());
+            dto.setNotes(emotionLog.getNotes());
+            JsonObject dtoJson = dto.toJSON();
+
+            return ResponseEntity.accepted().body(dtoJson.toString());
+
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse("fail", "Failed to process updated emotion log: " + ex.getMessage()));
+        }
 
     }
     

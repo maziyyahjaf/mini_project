@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { EmotionLog, EmotionLogResponse, EmotionLogUpdate } from '../models/emotion.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,19 +19,19 @@ export class EmotionLogService {
     return this.http.post('/api/emotions/log', emotionLog);
   }
 
-  updateEmotionLog(updatedLog: EmotionLogResponse) {
+  updateEmotionLog(updatedLog: EmotionLogResponse): Observable<EmotionLogResponse>  {
     // need to transform emotion log from response to emotionlog??
     const payload: EmotionLogUpdate = {
       deviceId: localStorage.getItem('deviceId') || "",
       emotionLogId: updatedLog.emotionLogId,
       emotion: updatedLog.emotion,
       intensity: updatedLog.intensity,
-      timestamp: new Date().toISOString(),
+      //timestamp: new Date().toISOString(),
+      timestamp: updatedLog.timestamp, // Use the original timestamp
       sendToDevice: updatedLog.sendToDevice,
       notes: updatedLog.notes
     }
-
-    return this.http.put(`/api/emotions/log/${updatedLog.emotionLogId}`, payload);
+    return this.http.put<EmotionLogResponse>(`/api/emotions/log/${updatedLog.emotionLogId}`, payload);
   }
 
 

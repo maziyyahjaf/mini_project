@@ -71,6 +71,32 @@ public class EmotionLogService {
         return Optional.empty();
     }
 
+    public void saveUpdatedLogAndPublishToDevice(EmotionLog log) {
+        try {
+            CompletableFuture.runAsync(()-> updateEmotionLog(log));
+        } catch (Exception ex) {
+            logger.error("Failed to save updated emotion log asynchronously", ex);
+        }
+
+        // Publish to device immediately
+        if (log.isSendToDevice()) {
+            String deviceId = log.getDeviceId();
+            if (deviceId.isEmpty()) {
+                deviceId = emotionLogrepository.fetchDeviceIdBasedOnFirebaseUid(log.getFirebaseUid());
+            }
+
+            mqttService.publishMessage(deviceId, log.getEmotion(), log.getIntensity());
+        }
+    }
+
+
+    private void updateEmotionLog(EmotionLog log) {
+        emotionLogrepository.updateEmotionLog(log);
+    }
+
+    public String fetchUserTimezone(String firebaseUid) {
+        return emotionLogrepository.fetchUserTimeZone(firebaseUid);
+    }
 
 
     
