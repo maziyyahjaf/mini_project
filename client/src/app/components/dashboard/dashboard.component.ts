@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit{
   moodRelativeTime: string = '';
   auraClass:string = 'aura-neutral'
   hugStatusMessage: string = '';
+  lastHugTime: string | null = null;
 
   dashboardService = inject(DashboardService);
   
@@ -46,10 +47,10 @@ export class DashboardComponent implements OnInit{
         }
 
         if (snapshot.hugInteraction?.lastSimultaneousHug) {
-          const hugTime = DateTime.fromISO(snapshot.hugInteraction.lastSimultaneousHug, {zone: 'utc'})
+          this.lastHugTime = DateTime.fromISO(snapshot.hugInteraction.lastSimultaneousHug, {zone: 'utc'})
                                   .setZone(DateTime.local().zoneName)
                                   .toRelative();
-          console.log(`You hugged together ${hugTime}`)
+          console.log(`You hugged together ${this.lastHugTime}`)
         }
 
         if (!snapshot.partnerEmotion) {
@@ -114,6 +115,17 @@ export class DashboardComponent implements OnInit{
         console.error(err);
       }
     });
+  }
+
+  refreshLastHugTime() {
+    this.dashboardService.refreshLastHugTime(this.pairingId).subscribe({
+      next: (res) => {
+       this.lastHugTime = res.timestamp;
+      },
+      error: (err) => {
+        console.error('Failed to fetch updated hug time', err);
+      }
+    })
   }
 
   

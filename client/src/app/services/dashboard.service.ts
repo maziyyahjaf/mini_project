@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DashboardSnapshot, EmotionLogResponse } from '../models/emotion.model';
+import { DashboardSnapshot, EmotionLogResponse, HugInteraction } from '../models/emotion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class DashboardService {
   private baseUrl = '/api/insights';
   private dashboardUrl = '/api/dashboard';
   private mqttURL = '/api/mqtt'
+  private hugtimeURL = '/api/hugs'
   http = inject(HttpClient);
 
   getLatestEmotionLogForToday(date: string): Observable<EmotionLogResponse> {
@@ -32,5 +33,10 @@ export class DashboardService {
       pairedDeviceId: pairedDeviceId
     }
     return this.http.post(`${this.mqttURL}/send-hug`, partnerDeviceId)
+  }
+
+  refreshLastHugTime(pairingId: string): Observable<{timestamp: string}> {
+    const httpParams = new HttpParams().set("pairingId", pairingId);
+    return this.http.get<{timestamp: string}>(`${this.hugtimeURL}`, {params : httpParams})
   }
 }

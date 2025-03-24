@@ -60,5 +60,11 @@ public class DashboardService {
         return snapshot;
 
     }
+
+    public Optional<LocalDateTime> getLastSimultaneousHug(String pairing_id) {
+    
+        Optional<LocalDateTime> lastSimultaneousHugOpt = hugEventRepository.getLastSimultaneousHug(pairing_id);
+        return lastSimultaneousHugOpt;
+    }
     
 }

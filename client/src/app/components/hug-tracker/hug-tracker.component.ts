@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
 import { HugCountService } from '../../services/hug-count.service';
 import { Subscription } from 'rxjs';
@@ -31,6 +31,8 @@ export class HugTrackerComponent implements OnInit {
   wsService = inject(WebSocketService);
   hugCountService = inject(HugCountService);
 
+  @Output() hugUpdated = new EventEmitter<void>();
+
   ngOnInit(): void {
     console.log('Component initializing...');
 
@@ -61,6 +63,7 @@ export class HugTrackerComponent implements OnInit {
        // Trigger animation if count increases
        if (this.hugCount > this.previousCount) {
         this.triggerCountAnimation();
+        this.hugUpdated.emit();
       }
     });
 
