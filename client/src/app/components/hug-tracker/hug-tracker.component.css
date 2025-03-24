@@ -1,0 +1,136 @@
+/* hug-tracker.component.css */
+
+.hug-tracker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 1rem 0;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  font-family: 'Comfortaa', cursive;
+}
+  
+  .hug-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .hug-label {
+    font-size: 1rem;
+    color: #6b7280; /* soft gray */
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+  
+  .hug-count {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #e91e63;
+    transition: transform 0.3s ease;
+  }
+  /* Pulse animation when count increases */
+  .hug-count.pulse {
+    animation: pulse 0.6s ease;
+  }
+  
+  @keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.2); color: #ff4081; }
+    100% { transform: scale(1); }
+  }
+  
+  /* Heart background */
+  .heart-bg {
+    position: relative;
+  }
+  
+ /* Heart Background */
+.heart-bg::before {
+  content: '❤️';
+  position: absolute;
+  font-size: 5.5rem;
+  opacity: 0.08;
+  z-index: -1;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+  
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .hug-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
+  }
+  
+  .hug-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(106, 17, 203, 0.4);
+  }
+  
+  .hug-button:active {
+    transform: translateY(0);
+  }
+  
+  /* .log-button {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    box-shadow: 0 4px 8px rgba(255, 154, 158, 0.3);
+  } */
+  
+  /* .insights-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+  } */
+
+  .sparkle-emoji {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: sparkleBurst 1s ease-out forwards;
+  }
+  
+  .sparkle-emoji:nth-child(1)  { transform: rotate(0deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(2)  { transform: rotate(30deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(3)  { transform: rotate(60deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(4)  { transform: rotate(90deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(5)  { transform: rotate(120deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(6)  { transform: rotate(150deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(7)  { transform: rotate(180deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(8)  { transform: rotate(210deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(9)  { transform: rotate(240deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(10) { transform: rotate(270deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(11) { transform: rotate(300deg) translateY(-30px); }
+  .sparkle-emoji:nth-child(12) { transform: rotate(330deg) translateY(-30px); }
+  
+  @keyframes sparkleBurst {
+    from {
+      opacity: 1;
+      transform: scale(0.7) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.4) translateY(-50px);
+    }
+  }
+  

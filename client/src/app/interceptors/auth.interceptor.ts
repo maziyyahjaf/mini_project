@@ -3,6 +3,7 @@ import { inject } from "@angular/core";
 import { Auth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { catchError, EMPTY, from, Observable, switchMap } from "rxjs";
+import { environment } from "../../environments/environment";
 
 export class AuthInterceptor implements HttpInterceptor {
     
@@ -16,15 +17,26 @@ export class AuthInterceptor implements HttpInterceptor {
         console.log("current user in interceptor:", user ? "User exists" : "No user");
         console.log("request URL:", req.url);
 
-        if (!user) {
-            console.log("no signedin user");
-            return next.handle(req);
+        // First handle API URL modification for relative URLs starting with /api
+        let updatedReq = req;
+        if (req.url.startsWith('/api') && environment.apiUrl) {
+            updatedReq = req.clone({
+                url: `${environment.apiUrl}${req.url}`
+            });
+            console.log("modified URL:", updatedReq.url);
         }
 
+        // If no user is authenticated, return the (potentially) modified request
+        if (!user) {
+            console.log("no signedin user");
+            return next.handle(updatedReq);
+        }
+
+    // If user exists, add the token to the (potentially) modified request
         return from(user.getIdToken(true)).pipe(
             switchMap(token => {
                 console.log('token in interceptor: ', token.substring(0,10) + '....');
-                const modifiedReq = req.clone({
+                const modifiedReq = updatedReq.clone({
                     setHeaders: { Authorization: `Bearer ${token}`}
                 });
                 return next.handle(modifiedReq);

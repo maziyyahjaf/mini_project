@@ -1,0 +1,131 @@
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+
+
+
+/* Aura base class */
+.aura {
+    border: 8px solid transparent;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    transition: box-shadow 0.6s ease-in-out, border-color 0.6s ease-in-out;
+  }
+  
+  /* Mood-based aura glow colors */
+  .aura-happy    { border-color: #fbd786; box-shadow: 0 0 30px #fbd78688; }
+  .aura-sad      { border-color: #667db6; box-shadow: 0 0 30px #667db688; }
+  .aura-angry    { border-color: #e52d27; box-shadow: 0 0 30px #e52d2788; }
+  .aura-calm     { border-color: #8DC26F; box-shadow: 0 0 30px #8DC26F88; }
+  .aura-tired    { border-color: #614385; box-shadow: 0 0 30px #61438588; }
+  .aura-anxious  { border-color: #6c5b7b; box-shadow: 0 0 30px #6c5b7b88; }
+  .aura-neutral  { border-color: #d3cce3; box-shadow: 0 0 20px #d3cce388; }
+  
+  /* Centered Mood Bubble */
+  .center {
+    /* position: absolute;
+    top: 50%;
+    left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    margin-top: 1rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.75);
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    max-width: 320px;
+    width: 90%;
+    font-family: 'Comfortaa', cursive;
+  }
+  
+  /* Mood Emoji */
+  .emoji {
+    font-size: 4rem;
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  
+  /* Text Styling */
+  .mood-text {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+    color: #333;
+  }
+  
+  .time-text {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #777;
+  }
+  
+
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .greeting {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .dashboard-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .hug-button, .log-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 1.5rem;
+    border: none;
+    background-color: #ffedf0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .hug-button:hover, .log-button:hover {
+    background-color: #ffe4ea;
+  }
+  
+  .partner-status {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 1rem;
+    color: #444;
+  }
+  
+  .hug-feedback {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+    animation: fadeIn 0.5s ease;
+    color: #4b5563;
+  }
+  
+  /* .hug-feedback {
+    font-size: 2.5rem;
+    animation: floatHug 1.5s ease-in-out forwards;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  
+  @keyframes floatHug {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, -50px); opacity: 0; }
+  } */
+  

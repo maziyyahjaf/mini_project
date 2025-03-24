@@ -1,4 +1,4 @@
-<h1>Register</h1>
+<!-- <h1>Register</h1>
 
 <form [formGroup]="form" (submit)="onSubmit()">
     <div>
@@ -16,4 +16,50 @@
     <div>
         <button type="submit">Sign Up</button>
     </div>
-</form>
+</form> -->
+
+<!-- registration.component.html -->
+<div class="register-container">
+    <form [formGroup]="form" (submit)="onSubmit()">
+      <div class="d-flex justify-content-center mb-3" *ngIf="error">
+        <span class="alert alert-danger text-center w-100">{{ error }}</span>
+      </div>
+  
+      <h2>Create Your Account</h2>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-icons position-absolute">person</span>
+        <input type="text" id="deviceId" class="form-control ps-5" formControlName="deviceId" placeholder="Device ID">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('deviceId')?.invalid && (form.get('deviceId')?.dirty || form.get('deviceId')?.touched)">
+          Please enter a valid device ID
+        </div>
+      </div>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-symbols-outlined position-absolute">id_card</span>
+        <input type="text" id="name" class="form-control ps-5" formControlName="name" placeholder="Name">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)">
+          Please enter your name
+        </div>
+      </div>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-icons position-absolute">email</span>
+        <input type="email" id="email" class="form-control ps-5" formControlName="email" placeholder="Email">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)">
+          Please enter a valid email address
+        </div>
+      </div>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-icons position-absolute">lock</span>
+        <input type="password" id="password" class="form-control ps-5" formControlName="password" placeholder="Password">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)">
+          Please enter a valid password
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button>
+      <a routerLink="/login" class="login-link">Already have an account? Log in</a>
+    </form>
+  </div>

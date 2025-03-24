@@ -140,6 +140,25 @@ public class UserRepository {
         }, firebaseUid);
     }
 
+    public Optional<String> getPartnerFirebaseUid(String pairingId, String currentUserId) {
+        String sql = 
+                """
+                    SELECT firebase_user_id
+                    FROM users
+                    WHERE pairing_id = ?
+                    AND firebase_user_id != ?
+                    LIMIT 1
+                
+                """;
+        try {
+            String partnerId = jdbcTemplate.queryForObject(sql, String.class, pairingId, currentUserId);
+            return Optional.of(partnerId);
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            return Optional.empty();
+        }
+    }
+
     
 
 

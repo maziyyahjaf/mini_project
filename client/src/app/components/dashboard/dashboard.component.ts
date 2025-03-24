@@ -1,0 +1,121 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { UserLoginPayload } from '../../models/user.model';
+import { DashboardSnapshot, EmotionLogResponse } from '../../models/emotion.model';
+import { DashboardService } from '../../services/dashboard.service';
+import { DateTime } from 'luxon';
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: false,
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css'
+})
+export class DashboardComponent implements OnInit{
+
+  // can get name from local storage
+  userName: string | null = localStorage.getItem('name');
+  pairingId: string = localStorage.getItem('pairing_id') || '';
+  todayMood!: EmotionLogResponse;
+  partnerMood!: EmotionLogResponse;
+  streakCount!: number;
+  date!: string;
+  noLogMessage: string = '';
+  snapshot!: DashboardSnapshot;
+  moodEmoji: string = '';
+  moodRelativeTime: string = '';
+  auraClass:string = 'aura-neutral'
+  hugStatusMessage: string = '';
+
+  dashboardService = inject(DashboardService);
+  
+  ngOnInit(): void {
+    this.date = new Date().toISOString();
+
+    this.dashboardService.getDashboardSnapshot(this.date,this.pairingId).subscribe({
+      next: (snapshot) => {
+        console.log(snapshot);
+        this.snapshot = snapshot;
+
+        if (snapshot.latestEmotionLog) {
+          this.todayMood = snapshot.latestEmotionLog
+          const emotion = snapshot.latestEmotionLog.emotion;
+          this.auraClass = this.mapMoodToAura(emotion);
+          this.moodEmoji = this.getEmojiForEmotion(emotion);
+          this.moodRelativeTime = DateTime.fromISO(snapshot.latestEmotionLog.timestamp).toRelative() ?? '';
+          console.log(`You've been feeling ${emotion} ${this.moodEmoji} (${this.moodRelativeTime})`)
+        }
+
+        if (snapshot.hugInteraction?.lastSimultaneousHug) {
+          const hugTime = DateTime.fromISO(snapshot.hugInteraction.lastSimultaneousHug, {zone: 'utc'})
+                                  .setZone(DateTime.local().zoneName)
+                                  .toRelative();
+          console.log(`You hugged together ${hugTime}`)
+        }
+
+        if (!snapshot.partnerEmotion) {
+          console.log(`Your partner hasn't checked in yet 🐻`);
+        }
+
+      },
+      error: (error) => {
+        console.error(error.message);
+      }
+    })
+  }
+
+
+  getRelativeTime(isoTime: string): string {
+    return DateTime.fromISO(isoTime, { zone: 'utc' })
+      .setZone(DateTime.local().zoneName)
+      .toRelative() || '';
+  }
+
+  getEmojiForEmotion(emotion: string): string {
+    const map: Record<string, string> = {
+      happy: '😊',
+      excited: '🤩',
+      calm: '😌',
+      love: '🥰',
+      longing: '🥺',
+      sad: '😢',
+      anxious: '😰',
+      stressed: '😖',
+    };
+    return map[emotion.toLowerCase()] || '🌈';
+  }
+
+  mapMoodToAura(mood: string): string {
+    switch (mood.toLowerCase()) {
+      case 'happy': return 'aura-happy';
+      case 'sad': return 'aura-sad';
+      case 'angry': return 'aura-angry';
+      case 'calm':
+      case 'love': return 'aura-calm';
+      case 'tired':
+      case 'longing': return 'aura-tired';
+      case 'anxious': return 'aura-anxious';
+      default: return 'aura-neutral';
+    }
+  }
+
+  sendHug() {
+    const pairedDeviceId = localStorage.getItem('pairedDeviceId') || '';
+    if (!pairedDeviceId) {
+      this.hugStatusMessage = '⚠️ No paired device found!';
+      return;
+    }
+    this.dashboardService.sendHug(pairedDeviceId).subscribe({
+      next: () => {
+        this.hugStatusMessage = '🤗 Hug sent!';
+        setTimeout(() => this.hugStatusMessage = '', 3000);
+      },
+      error: (err) => {
+        this.hugStatusMessage = '⚠️ Failed to send hug';
+        console.error(err);
+      }
+    });
+  }
+
+  
+    
+}

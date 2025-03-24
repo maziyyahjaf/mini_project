@@ -1,4 +1,6 @@
 export const environment = {
+    production:false,
+    apiUrl: '',
     firebase: {
         apiKey: "AIzaSyCReB4zAQVZZj99aEJ85R5X9yhQTe5tbFI",
         authDomain: "mood-17ae4.firebaseapp.com",

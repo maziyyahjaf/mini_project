@@ -16,6 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 @Configuration
 public class FirebaseConfig {
 
+    @Value("${FIREBASE_CREDENTIALS:}")
+    private String firebaseCredentialsEnv;
+
     @Value("classpath:/private-key.json")
     private Resource privateKey;
 
@@ -24,7 +27,15 @@ public class FirebaseConfig {
 
         // check if FirebaseApp is already initialized
         if (FirebaseApp.getApps().isEmpty()) {
-            InputStream credentials = new ByteArrayInputStream(privateKey.getContentAsByteArray());
+            InputStream credentials;
+
+            if (firebaseCredentialsEnv != null && !firebaseCredentialsEnv.isEmpty()) {
+                // use environment variable in production (railway)
+                credentials = new ByteArrayInputStream(firebaseCredentialsEnv.getBytes());
+            } else {
+                credentials = new ByteArrayInputStream(privateKey.getContentAsByteArray());
+            }
+        
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                                                             .setCredentials(GoogleCredentials.fromStream(credentials))
                                                             .build();

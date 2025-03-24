@@ -7,15 +7,19 @@ import { SuccessRegistrationComponent } from './components/success-registration/
 import { HugTrackerComponent } from './components/hug-tracker/hug-tracker.component';
 import { EmotionLogComponent } from './components/emotion-log/emotion-log.component';
 import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-pattern.component';
+import { DailyLogsComponent } from './components/daily-logs/daily-logs.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
-  {path: "", component: AppComponent},
+  {path: "", component: RegisterComponent},
   {path: "login", component: LoginComponent},
   {path: "register", component: RegisterComponent},
   {path: "register-success", component: SuccessRegistrationComponent},
   {path: "hugs", component: HugTrackerComponent},
   {path: "log", component: EmotionLogComponent},
   {path: "insights", component: WeeklyPatternComponent},
+  {path: "daily-logs", component: DailyLogsComponent},
+  {path: "dashboard", component: DashboardComponent},
   {path: "**", component: AppComponent}
 ];
 

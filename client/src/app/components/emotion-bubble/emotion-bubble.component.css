@@ -1,0 +1,33 @@
+.emotion-bubble-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
+  }
+  
+  .emoji {
+    font-size: 3rem;
+  }
+  
+  .mood-text {
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+  }
+  
+  .relative-time {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.25rem;
+  }
+  
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }

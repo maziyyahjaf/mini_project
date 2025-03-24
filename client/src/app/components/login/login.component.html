@@ -1,4 +1,4 @@
-<h1>Login</h1>
+<!-- <h1>Login</h1>
 
 <form [formGroup]="form" (submit)="onSubmit()">
     <div>
@@ -10,4 +10,34 @@
     <div>
         <button type="submit">Sign In</button>
     </div>
-</form>
+</form> -->
+
+<!-- login.component.html -->
+<div class="login-container">
+    <form [formGroup]="form" (submit)="onSubmit()">
+      <div class="d-flex justify-content-center mb-3" *ngIf="error">
+        <span class="alert alert-danger text-center w-100">{{ error }}</span>
+      </div>
+  
+      <h2>Welcome Back</h2>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-icons position-absolute">email</span>
+        <input type="email" id="email" class="form-control ps-5" formControlName="email" placeholder="Email">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)">
+          Please enter a valid email address
+        </div>
+      </div>
+  
+      <div class="mb-3 position-relative">
+        <span class="material-icons position-absolute">lock</span>
+        <input type="password" id="password" class="form-control ps-5" formControlName="password" placeholder="Password">
+        <div class="alert alert-danger mt-1" *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)">
+          Please enter your password
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Sign In</button>
+      <a routerLink="/register" class="register-link">Don't have an account? Sign up</a>
+    </form>
+  </div>

@@ -14,7 +14,9 @@ export class WebSocketService {
 
     console.log('connecting to Websocket');
     this.stompClient = new Client({
-      brokerURL: "/ws",
+       // Use the backend URL for WebSocket connection, not the frontend URL
+      brokerURL: 'wss://proud-comfort-production.up.railway.app/ws',
+      // brokerURL: "/ws",
       reconnectDelay: 5000,
       debug: (msg) => {
         console.log("STOMP Debug: ", msg);

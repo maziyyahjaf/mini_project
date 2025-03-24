@@ -12,9 +12,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
+        stompEndpointRegistry.addEndpoint("/ws").setAllowedOrigins("https://mini-project-kappa-three.vercel.app", "http://localhost:4200").withSockJS();
         // Also add plain WebSocket support
-        stompEndpointRegistry.addEndpoint("/ws").setAllowedOrigins("*");
+        stompEndpointRegistry.addEndpoint("/ws").setAllowedOrigins("https://mini-project-kappa-three.vercel.app",
+                                                                            "http://localhost:4200");
     }
 
     @Override

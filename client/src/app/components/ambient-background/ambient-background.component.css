@@ -1,0 +1,45 @@
+.ambient-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: -1;
+    transition: all 1s ease-in-out;
+    animation: float 10s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Mood-based backgrounds */
+  .bg-happy {
+    background: linear-gradient(135deg, #fbd786, #f7797d);
+  }
+  
+  .bg-sad {
+    background: linear-gradient(135deg, #667db6, #0082c8);
+  }
+  
+  .bg-angry {
+    background: linear-gradient(135deg, #e52d27, #b31217);
+  }
+  
+  .bg-calm {
+    background: linear-gradient(135deg, #76b852, #8DC26F);
+  }
+  
+  .bg-tired {
+    background: linear-gradient(135deg, #614385, #516395);
+  }
+  
+  .bg-anxious {
+    background: linear-gradient(135deg, #355c7d, #6c5b7b);
+  }
+  
+  .neutral {
+    background: linear-gradient(135deg, #d3cce3, #e9e4f0);
+  }
+  

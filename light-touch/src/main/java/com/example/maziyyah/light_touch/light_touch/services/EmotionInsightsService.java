@@ -52,4 +52,15 @@ public class EmotionInsightsService {
         return emotionInsightsRepository.getListOfEmotionLogsByIds(timezoneOffset, logIdList, firebaseUid);
 
     }
+
+    public Optional<List<EmotionLogDTO>> getListOfEmotionLogsByDate(String isoDateString, String firebaseUid) {
+        String timezoneOffset = getCurrentOffsetForUser(firebaseUid);
+        return emotionInsightsRepository.getListOfEmotionLogsByDate(isoDateString, timezoneOffset, firebaseUid);
+
+    }
+
+    public Optional<EmotionLogDTO> getLatestEmotionLogForToday(String isoDateString, String firebaseUid) {
+        String timezoneOffset = getCurrentOffsetForUser(firebaseUid);
+        return emotionInsightsRepository.getLatestEmotionLogForToday(isoDateString, timezoneOffset, firebaseUid);
+    }
 }

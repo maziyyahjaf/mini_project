@@ -34,5 +34,7 @@ export class EmotionLogService {
     return this.http.put<EmotionLogResponse>(`/api/emotions/log/${updatedLog.emotionLogId}`, payload);
   }
 
+  
+
 
 }

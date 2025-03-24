@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.maziyyah.light_touch.light_touch.models.EmotionLogDTO;
@@ -100,6 +101,54 @@ public class EmotionInsightsController {
         JsonArray jsonArray = jab.build();
         return ResponseEntity.ok().body(jsonArray.toString());
         
+    }
+
+    @GetMapping(path = "daily")
+    public ResponseEntity<?> getEmotionLogsByDate(@RequestParam("date") String dateString) {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String firebaseUid = (String) authentication.getPrincipal();
+        logger.info("Authenticated user UID: {}", firebaseUid);
+        logger.info("Authenticated User in get emotion logs by date: {}", authentication.getPrincipal());
+        logger.info("User Authorities in get emotion logs by date: {}", authentication.getAuthorities());
+
+        // call the service to get the emotion logs by date
+        Optional<List<EmotionLogDTO>> emotionLogsOpt = emotionInsightsService.getListOfEmotionLogsByDate(dateString, firebaseUid);
+        
+        if (emotionLogsOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+
+        }
+        List<EmotionLogDTO> emotionLogs = emotionLogsOpt.get();
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+        for (EmotionLogDTO dto: emotionLogs) {
+            JsonObject jsonDTO = dto.toJSON();
+            jab.add(jsonDTO);
+        }
+        
+        JsonArray jsonArray = jab.build();
+        return ResponseEntity.ok().body(jsonArray.toString());
+    }
+
+    @GetMapping(path = "today/latest")
+    public ResponseEntity<?> getLatestEmotionLogForToday(@RequestParam("date") String dateString) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String firebaseUid = (String) authentication.getPrincipal();
+        logger.info("Authenticated user UID: {}", firebaseUid);
+        logger.info("Authenticated User in get latest emotion log: {}", authentication.getPrincipal());
+        logger.info("User Authorities in get latest emotion log: {}", authentication.getAuthorities());
+
+        // call the service to get latest log for the day
+        Optional<EmotionLogDTO> latestLogOpt = emotionInsightsService.getLatestEmotionLogForToday(dateString, firebaseUid);
+        if (latestLogOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+            // show a message?>
+        }
+
+        EmotionLogDTO latestLog = latestLogOpt.get();
+        JsonObject lastestLogJSON = latestLog.toJSON();
+        return ResponseEntity.ok().body(lastestLogJSON.toString());
+
     }
 
     

@@ -3,13 +3,16 @@ package com.example.maziyyah.light_touch.light_touch.repositories;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -92,7 +95,27 @@ public class HugEventRepository {
             throw new ErrorRetrievingHugCount(String.format("Error retrieving hug count from SQL for pairing id %s", pairingId));
         }
 
+    }
 
+    public Optional<LocalDateTime> getLastSimultaneousHug(String pairingId) {
+        String sql =
+                """
+                    SELECT timestamp
+                    FROM hugEvents
+                    WHERE pairing_id = ?
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                """;
+
+        try {
+            LocalDateTime result = jdbcTemplate.queryForObject(sql,
+                                        (rs,rowNum) -> rs.getTimestamp("timestamp").toLocalDateTime(),
+                                        pairingId);
+            return Optional.ofNullable(result);
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty(); // no hug found
+        }
+        
     }
 
   

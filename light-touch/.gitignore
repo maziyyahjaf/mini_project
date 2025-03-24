@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Firebase
+private-key.json
+**/src/main/resources/private-key.json

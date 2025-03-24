@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   fb = inject(FormBuilder);
   authService = inject(AuthService);
   detectedTimezone!: string;
+  error: string | null = null;
 
   ngOnInit(): void {
     this.form = this.createForm();
@@ -27,7 +28,7 @@ export class RegisterComponent implements OnInit {
     return this.fb.group({
       deviceId: this.fb.control<string>('', [Validators.required]),
       name: this.fb.control<string>('', [Validators.required]),
-      email: this.fb.control<string>('', [Validators.required]),
+      email: this.fb.control<string>('', [Validators.required, Validators.email]),
       password: this.fb.control<string>('', [Validators.required])
     })
   }

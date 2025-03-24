@@ -1,6 +1,8 @@
 package com.example.maziyyah.light_touch.light_touch.repositories;
 
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.example.maziyyah.light_touch.light_touch.models.EmotionLogDTO;
+import com.example.maziyyah.light_touch.light_touch.models.PartnerEmotionDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionAvgIntensityDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionDeviceDTO;
 import com.example.maziyyah.light_touch.light_touch.models.EmotionInsights.EmotionFrequencyDTO;
@@ -177,7 +181,7 @@ public class EmotionInsightsRepository {
             "notes " +
             "FROM emotion_logs " +
             "WHERE log_id IN (%s) " +
-            "AND firebase_user_id = ?", placeholders);
+            "AND firebase_user_id = ? ORDER BY local_timestamp DESC", placeholders); // order by local_timestamp?
 
             // Build parameters list: [timezone, logId1, logId2, ..., firebaseUid]
             List<Object> params = new ArrayList<>();
@@ -220,4 +224,77 @@ public class EmotionInsightsRepository {
             throw new RuntimeException("Database error: Unable to retrieve weekly pattern.");
         }
     }
+
+
+    public Optional<List<EmotionLogDTO>> getListOfEmotionLogsByDate(String isoDateString, String timezoneOffset, String firebaseUid) {
+        
+        List<EmotionLogDTO> logsForTheDay = new ArrayList<>();
+        Timestamp sqlTimestamp = Timestamp.from(Instant.parse(isoDateString));
+        String sql = """
+                        SELECT log_id, 
+                                firebase_user_id, 
+                                emotion, 
+                                intensity,
+                                CONVERT_TZ(timestamp, @@session.time_zone, ?) AS local_timestamp,
+                                send_to_device,
+                                notes
+                        FROM emotion_logs
+                        WHERE DATE(CONVERT_TZ(timestamp, @@session.time_zone, ?)) = DATE(CONVERT_TZ(?, @@session.time_zone, ?))
+                        AND firebase_user_id = ?
+                        ORDER BY local_timestamp DESC
+                    """;
+        try {
+            logsForTheDay = jdbcTemplate.query(sql,
+                                (rs, rowNum) -> EmotionLogDTO.populate(rs),
+                                timezoneOffset,
+                                timezoneOffset,
+                                sqlTimestamp,
+                                timezoneOffset,
+                                firebaseUid);
+            return logsForTheDay.isEmpty() ? Optional.empty() : Optional.of(logsForTheDay);
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error retrieving logs for the day from MySQL for user: {}", firebaseUid, ex);
+            throw new RuntimeException("Database error: Unable to retrieve logs for the day.");
+        }
+        
+
+    }
+
+    public Optional<EmotionLogDTO> getLatestEmotionLogForToday (String isoDateString, String timezoneOffset, String firebaseUid) {
+        Timestamp sqlTimestamp = Timestamp.from(Instant.parse(isoDateString));
+       
+
+        String sql = """
+                        SELECT log_id, 
+                                firebase_user_id, 
+                                emotion, 
+                                intensity,
+                                CONVERT_TZ(timestamp, @@session.time_zone, ?) AS local_timestamp,
+                                send_to_device,
+                                notes
+                        FROM emotion_logs
+                        WHERE DATE(CONVERT_TZ(timestamp, @@session.time_zone, ?)) = DATE(CONVERT_TZ(?, @@session.time_zone, ?))
+                        AND firebase_user_id = ?
+                        ORDER BY local_timestamp DESC
+                        LIMIT 1
+                    """;
+        try {
+            EmotionLogDTO dto = jdbcTemplate.query(sql, (ResultSet rs) -> {
+                if (rs.next()) {
+                    return EmotionLogDTO.populate(rs);
+                } else {
+                    return null;
+                }
+            }, timezoneOffset, timezoneOffset, sqlTimestamp, timezoneOffset, firebaseUid);
+            return Optional.ofNullable(dto);
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error retrieving logs for the day from MySQL for user: {}", firebaseUid, ex);
+            return Optional.empty();
+        }
+
+    }
+
+    
 }

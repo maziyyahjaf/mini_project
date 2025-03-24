@@ -1,0 +1,50 @@
+
+<div class="dashboard-wrapper">
+
+
+<section class="dashboard-top">
+    <h2 class="greeting">Hi, {{ userName | titlecase }} 👋</h2>
+  
+    <div class="center aura" [ngClass]="auraClass" *ngIf="snapshot?.latestEmotionLog as mood">
+      <div class="emoji">{{ moodEmoji }}</div>
+      <div class="mood-text">You’ve been feeling {{ mood.emotion }}</div>
+      <div class="time-text">{{ moodRelativeTime }}</div>
+
+    </div>
+  </section>
+
+ 
+
+  <section class="dashboard-actions">
+    <button class="hug-button" (click)="sendHug()">🤗 Send a Hug</button>
+    <button class="log-button" routerLink="/log">📝 Log a Feeling</button>
+  </section>
+
+  <div *ngIf="hugStatusMessage" class="hug-feedback">
+    {{ hugStatusMessage }}
+  </div>
+
+  <app-hug-tracker></app-hug-tracker>
+
+
+  <section class="partner-status" *ngIf="snapshot?.hugInteraction ">
+    <div *ngIf="snapshot.hugInteraction?.lastSimultaneousHug as hugTime; else noHugs">
+        💞 Hugged {{ getRelativeTime(hugTime) }}
+    </div>
+    <ng-template #noHugs>
+        🤗 No hugs yet today
+    </ng-template>
+  
+    <div *ngIf="snapshot.partnerEmotion; else noPartner">
+      Your partner is feeling {{ snapshot.partnerEmotion.emotion }}
+      {{ getEmojiForEmotion(snapshot.partnerEmotion.emotion) }} today
+    </div>
+  
+    <ng-template #noPartner>
+      Your partner hasn’t checked in yet 🐻
+    </ng-template>
+  </section>
+
+
+
+</div>

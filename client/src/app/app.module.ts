@@ -9,7 +9,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { ReactiveFormsModule } from '@angular/forms';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { browserSessionPersistence, getAuth, provideAuth, setPersistence } from '@angular/fire/auth';
-import { environment } from '../environments/environment.development';
+import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SuccessRegistrationComponent } from './components/success-registration/success-registration.component';
@@ -18,6 +18,12 @@ import { EmotionLogComponent } from './components/emotion-log/emotion-log.compon
 import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-pattern.component';
 import { EmotionLogDetailsComponent } from './components/emotion-log-details/emotion-log-details.component';
 import { DailyLogsComponent } from './components/daily-logs/daily-logs.component';
+import { JournalComponent } from './components/journal/journal.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AmbientBackgroundComponent } from './components/ambient-background/ambient-background.component';
+import { EmotionBubbleComponent } from './components/emotion-bubble/emotion-bubble.component';
+import { PartnerStatusComponent } from './components/partner-status/partner-status.component';
+import { FloatingPromptComponent } from './components/floating-prompt/floating-prompt.component';
 
 
 // firebase initialization function
@@ -39,7 +45,13 @@ import { DailyLogsComponent } from './components/daily-logs/daily-logs.component
     EmotionLogComponent,
     WeeklyPatternComponent,
     EmotionLogDetailsComponent,
-    DailyLogsComponent
+    DailyLogsComponent,
+    JournalComponent,
+    DashboardComponent,
+    AmbientBackgroundComponent,
+    EmotionBubbleComponent,
+    PartnerStatusComponent,
+    FloatingPromptComponent
   ],
   imports: [
     BrowserModule,

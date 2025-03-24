@@ -1,0 +1,6 @@
+-- JournalEntries
+-- - entryId (PK)
+-- - logId (FK referencing EmotionLogs.logId)
+-- - content
+-- - timestamp
+-- - prompt (optional - to store what prompt was shown)

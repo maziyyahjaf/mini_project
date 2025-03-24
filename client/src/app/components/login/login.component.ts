@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit{
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
+  error: string | null = null;
 
 
   ngOnInit(): void {
@@ -37,7 +38,8 @@ export class LoginComponent implements OnInit{
 
     try{
       const result = await this.authService.loginUser(formValue.email, formValue.password);
-      this.router.navigate(['/hugs']);
+      // this.router.navigate(['/hugs']);
+      this.router.navigate(['/dashboard']);
 
     } catch (error: any) {
       alert("Login failed: " + error.message);

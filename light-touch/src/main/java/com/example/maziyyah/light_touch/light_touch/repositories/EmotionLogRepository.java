@@ -119,6 +119,9 @@ public class EmotionLogRepository {
         String sql = "SELECT timezone FROM users WHERE firebase_user_id = ?";
         return jdbcTemplate.queryForObject(sql, String.class, firebaseUid);
     }
+
+    // get logs by date?
+    
 }
 
 
