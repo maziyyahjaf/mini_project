@@ -3,6 +3,7 @@ import { UserLoginPayload } from '../../models/user.model';
 import { DashboardSnapshot, EmotionLogResponse } from '../../models/emotion.model';
 import { DashboardService } from '../../services/dashboard.service';
 import { DateTime } from 'luxon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit{
   lastHugTime: string | null = null;
 
   dashboardService = inject(DashboardService);
+  router = inject(Router);
   
   ngOnInit(): void {
     this.date = new Date().toISOString();
@@ -47,10 +49,14 @@ export class DashboardComponent implements OnInit{
         }
 
         if (snapshot.hugInteraction?.lastSimultaneousHug) {
-          this.lastHugTime = DateTime.fromISO(snapshot.hugInteraction.lastSimultaneousHug, {zone: 'utc'})
-                                  .setZone(DateTime.local().zoneName)
-                                  .toRelative();
-          console.log(`You hugged together ${this.lastHugTime}`)
+          // this.lastHugTime = DateTime.fromISO(snapshot.hugInteraction.lastSimultaneousHug, {zone: 'utc'})
+          //                         .setZone(DateTime.local().zoneName)
+          //                         .toRelative();
+          this.lastHugTime = snapshot.hugInteraction?.lastSimultaneousHug;
+          console.log(`You hugged together ${this.getRelativeTime(this.lastHugTime)}`)
+          console.log("lastHugTime value:", this.lastHugTime); 
+
+
         }
 
         if (!snapshot.partnerEmotion) {
@@ -88,11 +94,11 @@ export class DashboardComponent implements OnInit{
   mapMoodToAura(mood: string): string {
     switch (mood.toLowerCase()) {
       case 'happy': return 'aura-happy';
+      case 'excited': return 'aura-excited';
       case 'sad': return 'aura-sad';
-      case 'angry': return 'aura-angry';
-      case 'calm':
-      case 'love': return 'aura-calm';
-      case 'tired':
+      case 'calm': return 'aura-calm';
+      case 'stressed': return 'aura-stressed';
+      case 'love': return 'aura-love';
       case 'longing': return 'aura-tired';
       case 'anxious': return 'aura-anxious';
       default: return 'aura-neutral';

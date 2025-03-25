@@ -19,6 +19,7 @@ export class EmotionLogComponent implements OnInit {
   emotionStore = inject(EmotionStore);
   emotionLogForm!: FormGroup;
   router = inject(Router);
+  
 
   emotions$ = this.emotionStore.emotions$;
   selectedEmotion: string | null = null;
@@ -82,11 +83,11 @@ export class EmotionLogComponent implements OnInit {
   getIntensityLabel(): string {
     const intensity = this.emotionLogForm.get('intensity')?.value;
     switch (intensity) {
-      case 1: return 'Very Low';
-      case 2: return 'Low';
+      case 1: return 'Gentle';
+      case 2: return 'Light';
       case 3: return 'Moderate';
       case 4: return 'High';
-      case 5: return 'Very High';
+      case 5: return 'Intense';
       default: return 'Moderate';
     }
   }

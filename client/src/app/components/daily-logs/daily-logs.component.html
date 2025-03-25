@@ -19,20 +19,20 @@
     <!-- Empty state -->
     <div *ngIf="!isLoading && !error && todaysLogs.length === 0" class="empty-state">
       <p>No emotion logs recorded for this day.</p>
-      <button (click)="router.navigate(['/new-log'], { queryParams: { date: dateString } })">Record an Emotion</button>
+      <button (click)="router.navigate(['/log'], { queryParams: { date: dateString } })">Record an Emotion</button>
     </div>
   
     <!-- Content state -->
     <div *ngIf="!isLoading && !error && todaysLogs.length > 0" class="logs-content">
       <div class="logs-summary">
-        <p>You recorded {{ todaysLogs.length }} emotions today</p>
+        <p>✨ You recorded {{ todaysLogs.length }} emotions today ✨</p>
       </div>
       
       <div class="logs-list">
-        <div *ngFor="let log of todaysLogs" class="emotion-log-card">
-          <div class="log-time">{{ log.timestamp | date:'shortTime' }}</div>
+        <div *ngFor="let log of todaysLogs" [ngClass]="['emotion-log-card', log.emotion.toLowerCase()]">
+          <div class="log-time"> 🕒 {{ log.timestamp | date:'shortTime' }}</div>
           <div class="log-emotion">
-            <span class="emotion-name">{{ log.emotion }}</span>
+            <span class="emotion-name"> <span class="emoji">{{ getEmojiForEmotion(log.emotion) }}</span></span>
             <span class="emotion-intensity">Intensity: {{ log.intensity }}/5</span>
           </div>
           <!-- <div class="log-trigger" *ngIf="log.trigger">
@@ -42,8 +42,8 @@
             <p><strong>Notes:</strong> {{ log.notes }}</p>
           </div>
           <div class="log-actions">
-            <button (click)="router.navigate(['/edit-log', log.emotionLogId])">Edit</button>
-            <button (click)="deleteLog(log.emotionLogId)">Delete</button>
+            <button (click)="router.navigate(['/edit-log', log.emotionLogId])">📝 Edit</button>
+            <button (click)="deleteLog(log.emotionLogId)">🗑 Delete</button>
           </div>
         </div>
       </div>

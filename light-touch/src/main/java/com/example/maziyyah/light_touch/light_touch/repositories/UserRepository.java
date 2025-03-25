@@ -159,6 +159,22 @@ public class UserRepository {
         }
     }
 
+    public Optional<String> fetchEmailForEarlierRegisteredUser(String pairedDeviceId) {
+        String sql =
+                    """
+                        SELECT email
+                        FROM users
+                        WHERE device_id = ?         
+                    """;
+        try {
+            String earlierRegisteredUserEmail = jdbcTemplate.queryForObject(sql, String.class, pairedDeviceId);
+            return Optional.of(earlierRegisteredUserEmail);
+        } catch (EmptyResultDataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            return Optional.empty();
+        }
+    }
+
     
 
 

@@ -1,14 +1,31 @@
-.emotion-log-container {
+body {
+    background: linear-gradient(135deg, #f8f4ff 0%, #fff5f5 100%);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emotion-log-container {
     max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+    padding: 30px 25px;
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(183, 169, 220, 0.2), 0 6px 10px rgba(255, 195, 189, 0.15);
+    backdrop-filter: blur(5px);
   }
   
   h2 {
     text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 25px;
+    color: #635fa0;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 1.4;
   }
   
   .emotions-container {
@@ -16,140 +33,295 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
   
   .emotion-item {
+    padding: 12px 15px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    transition: all 0.3s ease-in-out;
+    scale: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 80px;
     border: 2px solid transparent;
   }
   
   .emotion-item:hover {
-    background-color: #f0f0f0;
+    background-color: #fffaf7;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 200, 150, 0.2);
   }
   
   .emotion-item.selected {
-    background-color: #e6f7ff;
-    border-color: #1890ff;
+    background-color: #fff6f6;
+    border-color: #ffa8a8;
+    transform: scale(1.08);
+    box-shadow: 0 8px 15px rgba(255, 144, 144, 0.25);
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  .emotion-item:hover .emoji {
+    animation: bounce 1s ease infinite;
   }
   
   .emoji {
-    font-size: 24px;
-    margin-bottom: 5px;
+    font-size: 28px;
+    margin-bottom: 8px;
+    transition: transform 0.3s ease;
   }
   
   .emotion-name {
     font-size: 14px;
+    font-weight: 500;
     text-align: center;
+    color: #655a7c;
   }
   
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
   }
   
   .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #655a7c;
+    font-size: 1rem;
   }
   
   .intensity-slider {
     width: 100%;
-    margin-bottom: 5px;
+    height: 8px;
+    margin-bottom: 12px;
+    appearance: none;
+    background: linear-gradient(to right, #f5d5fe, #a297dd);
+    border-radius: 10px;
+    outline: none;
+  }
+  
+  .intensity-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #8d81c7;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(141, 129, 199, 0.3);
+    transition: transform 0.2s ease;
+  }
+  
+  .intensity-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #7367b5;
   }
   
   .intensity-markers {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
-    color: #666;
+    position: relative;
+    padding: 0 2px;
+  }
+  
+  .intensity-markers span {
+    font-size: 13px;
+    color: #8b8395;
+    font-weight: 500;
+    position: relative;
+  }
+  
+  .intensity-markers span::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 8px;
+    background-color: #d7d0e9;
+    border-radius: 3px;
   }
   
   .intensity-label {
-    font-weight: normal;
-    color: #1890ff;
+    font-weight: 600;
+    color: #8d81c7;
+    padding: 3px 8px;
+    background-color: #f5f0ff;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-left: 6px;
   }
   
   .checkbox-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    background-color: #f9f5ff;
+    padding: 12px 16px;
+    border-radius: 15px;
+    margin-bottom: 20px;
   }
   
   .checkbox-group input {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #c7beec;
+    border-radius: 8px;
     margin: 0;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .checkbox-group input:checked {
+    background-color: #9d93d0;
+    border-color: #9d93d0;
+  }
+  
+  .checkbox-group input:checked::before {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 16px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   
   .checkbox-group label {
+    font-size: 15px;
+    color: #655a7c;
     margin: 0;
+    font-weight: 500;
     cursor: pointer;
   }
   
   textarea {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
+    padding: 15px;
+    border: 2px solid #e3ddf5;
+    border-radius: 18px;
     resize: vertical;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    color: #655a7c;
+    background-color: #fcfaff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    line-height: 1.4;
+    min-height: 90px;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #b3a7e0;
+    box-shadow: 0 0 0 4px rgba(179, 167, 224, 0.2);
+  }
+  
+  textarea::placeholder {
+    color: #bbb2d0;
   }
   
   .button-container {
     text-align: center;
+    margin-top: 10px;
   }
   
   button {
-    background-color: #1890ff;
+    background: linear-gradient(45deg, #a297dd, #ffa3b9);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 14px 30px;
+    border-radius: 30px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.2s;
+    font-weight: 600;
+    font-family: 'Quicksand', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(162, 151, 221, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ffa3b9, #a297dd);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
   button:hover:not(:disabled) {
-    background-color: #40a9ff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(162, 151, 221, 0.4);
+  }
+  
+  button:hover:not(:disabled)::before {
+    opacity: 1;
   }
   
   button:disabled {
-    background-color: #d9d9d9;
+    background: linear-gradient(45deg, #d7d2e9, #e2d4da);
     cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 163, 185, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 163, 185, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 163, 185, 0); }
+  }
+  
+  button:not(:disabled) {
+    animation: pulse 2s infinite;
   }
   
   .form-error {
-    color: #f5222d;
-    font-size: 12px;
-    margin-top: -10px;
-    margin-bottom: 10px;
-  }
-  
-  .debug-info {
-    margin-top: 30px;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    font-size: 12px;
+    color: #ff8f9e;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    background-color: #fff5f7;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border-left: 4px solid #ff8f9e;
   }
   
   @media (max-width: 480px) {
     .emotions-container {
-      gap: 10px;
+      gap: 12px;
     }
     
     .emotion-item {
-      min-width: 60px;
-      padding: 8px;
+      min-width: 65px;
+      padding: 10px;
     }
     
     .emoji {
-      font-size: 20px;
+      font-size: 24px;
+    }
+    
+    h2 {
+      font-size: 1.4rem;
+    }
+    
+    .intensity-slider::-webkit-slider-thumb {
+      width: 24px;
+      height: 24px;
     }
   }

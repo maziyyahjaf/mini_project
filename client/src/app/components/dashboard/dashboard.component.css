@@ -6,8 +6,6 @@
     gap: 1.5rem;
   }
 
-
-
 /* Aura base class */
 .aura {
     border: 8px solid transparent;
@@ -16,14 +14,23 @@
   }
   
   /* Mood-based aura glow colors */
-  .aura-happy    { border-color: #fbd786; box-shadow: 0 0 30px #fbd78688; }
+    .aura-happy    { border-color: #fbd786; box-shadow: 0 0 30px rgba(251, 215, 134, 0.55); }
+    .aura-excited  { border-color: #00ff40; box-shadow: 0 0 30px rgba(0, 255, 64, 0.55); }
+    .aura-calm     { border-color: #80e5ff; box-shadow: 0 0 30px rgba(128, 229, 255, 0.55); }
+    .aura-sad      { border-color: #8066db; box-shadow: 0 0 30px rgba(128, 102, 219, 0.55); }
+    .aura-stressed { border-color: #ff7700; box-shadow: 0 0 30px rgba(255, 119, 0, 0.55); }
+    .aura-love     { border-color: #c83f92; box-shadow: 0 0 30px rgba(200, 63, 146, 0.55); }
+    .aura-longing  { border-color: #ffa3a5; box-shadow: 0 0 30px rgba(255, 163, 165, 0.55); }
+    .aura-anxious  { border-color: #ff3d00; box-shadow: 0 0 30px rgba(255, 61, 0, 0.55); }
+    .aura-neutral  { border-color: #d3cce3; box-shadow: 0 0 20px rgba(211, 204, 227, 0.5); }
+  /* .aura-happy    { border-color: #fbd786; box-shadow: 0 0 30px #fbd78688; }
   .aura-sad      { border-color: #667db6; box-shadow: 0 0 30px #667db688; }
   .aura-angry    { border-color: #e52d27; box-shadow: 0 0 30px #e52d2788; }
   .aura-calm     { border-color: #8DC26F; box-shadow: 0 0 30px #8DC26F88; }
   .aura-tired    { border-color: #614385; box-shadow: 0 0 30px #61438588; }
   .aura-anxious  { border-color: #6c5b7b; box-shadow: 0 0 30px #6c5b7b88; }
   .aura-neutral  { border-color: #d3cce3; box-shadow: 0 0 20px #d3cce388; }
-  
+   */
   /* Centered Mood Bubble */
   .center {
     /* position: absolute;
@@ -128,4 +135,22 @@
     0% { transform: translate(-50%, 0); opacity: 1; }
     100% { transform: translate(-50%, -50px); opacity: 0; }
   } */
+  
+  .insights-button {
+    margin-top: 16px;
+    padding: 10px 20px;
+    background-color: #d2edf3;
+    color: #2a4e57;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
+  }
+  
+  .insights-button:hover {
+    background-color: #bee2ec;
+  }
   

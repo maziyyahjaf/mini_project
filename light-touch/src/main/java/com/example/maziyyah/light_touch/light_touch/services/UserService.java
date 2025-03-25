@@ -3,6 +3,9 @@ package com.example.maziyyah.light_touch.light_touch.services;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,11 @@ import com.example.maziyyah.light_touch.light_touch.repositories.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    MailService mailService;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -49,6 +57,23 @@ public class UserService {
             // trigger email to pairedDeviceUSer
             updatePairingStatus(deviceId, pairedDeviceId);
             // send email
+            String partnerName = payload.getName();
+            // need to get pairedDevice user email
+            Optional<String> pairedDeviceIdUserEmailOpt = userRepository.fetchEmailForEarlierRegisteredUser(pairedDeviceId);
+            if (pairedDeviceIdUserEmailOpt.isPresent()) {
+                String pairedDeviceIdUserEmail = pairedDeviceIdUserEmailOpt.get();
+                try {
+                    mailService.sendPartnerJoinedEmail(pairedDeviceIdUserEmail, partnerName);
+                } catch (Exception e) {
+                    logger.error("Failed to send partner joined email", e);
+
+                }
+
+            } else {
+                logger.warn("No email found for paired user with device ID: {}", pairedDeviceId);
+
+            }
+
         }
 
         String telegramLinkingCode = generateLinkingCode();
@@ -56,17 +81,16 @@ public class UserService {
         // generate the pairing id
         String pairingId = generatePairingId(deviceId, pairedDeviceId);
 
-        // need to get the timezone offset
         
         userRepository.saveNewlyRegisteredUser(payload, pairedDeviceId, isPairedStatus, telegramLinkingCode, pairingId);
 
-        SuccesfulRegistrationResponse succesfulRegistrationResponse = new SuccesfulRegistrationResponse("valid",
+        SuccesfulRegistrationResponse successfulRegistrationResponse = new SuccesfulRegistrationResponse("valid",
                                                                                                         "successful registration", 
                                                                                                         telegramLinkingCode, 
                                                                                                         pairedDeviceId, 
                                                                                                         pairingId);
 
-        return succesfulRegistrationResponse;
+        return successfulRegistrationResponse;
 
     }
 

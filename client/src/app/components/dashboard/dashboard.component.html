@@ -12,8 +12,12 @@
 
     </div>
   </section>
-
- 
+  
+  <div class="dashboard-insights">
+    <button class="insights-button" (click)="router.navigate(['/insights'])">
+      📊 View Weekly Insights
+    </button>
+  </div>
 
   <section class="dashboard-actions">
     <button class="hug-button" (click)="sendHug()">🤗 Send a Hug</button>
@@ -25,7 +29,6 @@
   </div>
 
   <app-hug-tracker (hugUpdated)="refreshLastHugTime()"></app-hug-tracker>
-
 
   <section class="partner-status" *ngIf="snapshot?.hugInteraction ">
     <div *ngIf="lastHugTime as hugTime; else noHugs">

@@ -1,7 +1,11 @@
+
+
+
 <div class="emotion-log-container">
     <form [formGroup]="emotionLogForm" (submit)="processEmotionLogForm()"> 
-      <h2>How are you feeling today? ✨</h2>
+      <h2>Hey there, how are you feeling today? 🌤️</h2>
 
+  
       <div class="emotions-container">
         @for(emotion of emotions$ | async; track emotion.displayOrder) {
           <div 
@@ -15,11 +19,11 @@
       </div>
   
       <div class="form-error" *ngIf="emotionLogForm.get('emotion')?.invalid && emotionLogForm.get('emotion')?.touched">
-        Please select how you're feeling
+        Please select an emotion
       </div>
   
       <div class="form-group">
-        <label for="intensity">How strong is this feeling? <span class="intensity-label">{{ getIntensityLabel() }}</span></label>
+        <label for="intensity">Intensity: <span class="intensity-label">{{ getIntensityLabel() }}</span></label>
         <input 
           type="range" 
           id="intensity" 
@@ -28,34 +32,40 @@
           formControlName="intensity"
           class="intensity-slider">
         <div class="intensity-markers">
-          <span>Gentle</span>
-          <span>Light</span>
-          <span>Moderate</span>
-          <span>Strong</span>
-          <span>Intense</span>
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
         </div>
       </div>
   
       <div class="form-group checkbox-group">
         <input type="checkbox" id="sendToDevice" formControlName="sendToDevice">
-        <label for="sendToDevice">Send to my device</label>
+        <label for="sendToDevice">Send to device?</label>
       </div>
   
       <div class="form-group">
-        <label for="notes">What's on your mind? (optional)</label>
+        <label for="notes">Notes (optional)</label>
         <textarea 
           id="notes" 
           formControlName="notes" 
           rows="3" 
-          placeholder="Take a moment to reflect on your thoughts..."></textarea>
+          placeholder="Add any additional thoughts here..."></textarea>
       </div>
   
       <div class="button-container">
         <button 
           type="submit" 
           [disabled]="emotionLogForm.invalid || submitting">
-          {{ submitting ? 'Capturing mood...' : 'Save My Mood' }}
+          {{ submitting ? 'Saving...' : 'Log Mood' }}
         </button>
       </div>
     </form>
+  
+    <!-- Debug info - remove in production -->
+    <div class="debug-info" *ngIf="false">
+      <pre>{{emotionLogForm.value | json}}</pre>
+      <pre>Form valid: {{emotionLogForm.valid}}</pre>
+    </div>
   </div>

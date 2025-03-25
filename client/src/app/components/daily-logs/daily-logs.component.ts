@@ -20,6 +20,7 @@ throw new Error('Method not implemented.');
   isLoading = true;
   dateString!: string;
   error: string | null = null;
+  moodEmoji: string = '';
 
   insightsService = inject(EmotionInsightsService);
   
@@ -39,6 +40,21 @@ throw new Error('Method not implemented.');
       }
     });
   } 
+
+
+  getEmojiForEmotion(emotion: string): string {
+    const map: Record<string, string> = {
+      happy: '😊',
+      excited: '🤩',
+      calm: '😌',
+      love: '🥰',
+      longing: '🥺',
+      sad: '😢',
+      anxious: '😰',
+      stressed: '😖',
+    };
+    return map[emotion.toLowerCase()] || '🌈';
+  }
 
   
 
