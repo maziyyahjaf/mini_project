@@ -26,12 +26,16 @@ export class EmotionLogService {
       emotionLogId: updatedLog.emotionLogId,
       emotion: updatedLog.emotion,
       intensity: updatedLog.intensity,
-      //timestamp: new Date().toISOString(),
-      timestamp: updatedLog.timestamp, // Use the original timestamp
+      timestamp: new Date().toISOString(),
+      //timestamp: updatedLog.timestamp, // Use the original timestamp
       sendToDevice: updatedLog.sendToDevice,
       notes: updatedLog.notes
     }
     return this.http.put<EmotionLogResponse>(`/api/emotions/log/${updatedLog.emotionLogId}`, payload);
+  }
+
+  deleteEmotionLog(logId: number) {
+    return this.http.delete(`/api/emotions/log/${logId}`);
   }
 
   

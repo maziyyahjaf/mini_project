@@ -4,6 +4,7 @@ import { DashboardSnapshot, EmotionLogResponse } from '../../models/emotion.mode
 import { DashboardService } from '../../services/dashboard.service';
 import { DateTime } from 'luxon';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit{
 
   dashboardService = inject(DashboardService);
   router = inject(Router);
+  authService = inject(AuthService);
   
   ngOnInit(): void {
     this.date = new Date().toISOString();
@@ -132,6 +134,16 @@ export class DashboardComponent implements OnInit{
         console.error('Failed to fetch updated hug time', err);
       }
     })
+  }
+
+  async onLogout() {
+    try {
+      await this.authService.logout();
+      this.router.navigate(['/login']);
+
+    } catch (error) {
+      console.error('logout error:', error);
+    }
   }
 
   

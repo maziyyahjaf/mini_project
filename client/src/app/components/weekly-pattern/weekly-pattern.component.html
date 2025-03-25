@@ -1,83 +1,52 @@
-
-<div class="container mx-auto p-4">
-  <h2 class="text-xl font-bold mb-4">Weekly Emotion Patterns</h2>
+<div class="weekly-container">
+  <h2 class="weekly-title">Your Weekly Emotion Patterns</h2>
+  <p class="weekly-subtitle">Tap a block to view emotion details from that day.</p>
   
-  <div *ngIf="isLoading" class="text-center py-8">
+  <div *ngIf="isLoading" class="loading-message">
     <p>Loading weekly patterns...</p>
     <!-- Add a spinner here if desired -->
   </div>
   
-  <div *ngIf="error" class="bg-red-100 border-l-4 border-red-500 p-4 mb-4">
+  <div *ngIf="error" class="error-message">
     <p>{{ error }}</p>
   </div>
   
-  <div *ngIf="!isLoading && !error" class="grid grid-cols-7 gap-2">
+  <div *ngIf="!isLoading && !error" class="weekly-grid">
     <!-- Headers for days of week -->
     <div *ngFor="let day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']" 
-         class="font-semibold text-center p-2 border-b">
+         class="weekly-day-header">
       {{ day }}
     </div>
     
     <!-- Emotion data for each day -->
     <div *ngFor="let day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']" 
-         class="flex flex-col border rounded" style="height: 400px;">
+         class="weekly-day-column">
       
       <!-- When no data is available -->
       <div *ngIf="patternsByDayWithPercentage[day].length === 0" 
-           class="flex items-center justify-center h-full text-gray-400">
+           class="no-data">
         No data
       </div>
       
       <!-- When data is available -->
       <div *ngIf="patternsByDayWithPercentage[day].length > 0" class="flex flex-col h-full">
         <div *ngFor="let pattern of patternsByDayWithPercentage[day]"
-             [ngClass]="getEmotionColorClass(pattern.emotion)"
-             class="p-2 flex flex-col justify-center cursor-pointer transition hover:shadow-md"
+      
+             [class]="'pattern-block ' + pattern.emotion.toLowerCase()"
              [style]="pattern.heightStyle"
              (click)="showDetails(pattern)">
-          <div class="font-medium">{{ pattern.emotion }}</div>
-          <div>{{ pattern.frequency }} ({{ pattern.percentage | number:'1.0-0' }}%)</div>
+          <span class="emoji">{{getEmojiForEmotion(pattern.emotion)}}</span>
+          <!-- [ngClass]="getEmotionColorClass(pattern.emotion)"  -->
+          <!-- <div>{{ pattern.frequency }} ({{ pattern.percentage | number:'1.0-0' }}%)</div> -->
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Details Modal -->
-<!-- <div *ngIf="isDetailsModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-bold">Emotion Log Details</h3>
-      <button (click)="closeDetailsModal()" class="text-gray-500 hover:text-gray-700">
-        <span class="sr-only">Close</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    
-    <div *ngIf="selectedLogs.length === 0" class="text-center py-4">
-      <p>No logs found for this selection.</p>
-    </div>
-    
-    <div *ngIf="selectedLogs.length > 0" class="space-y-4">
-      <div *ngFor="let log of selectedLogs" class="border-b pb-3">
-        <div class="flex justify-between">
-          <span [ngClass]="getEmotionColorClass(log.emotion)" class="px-2 py-1 rounded">
-            {{ log.emotion }}
-          </span>
-          <span class="text-gray-500">
-            {{ log.timestamp | date:'MMM d, y h:mm a' }}
-          </span>
-        </div>
-        <p *ngIf="log.notes" class="mt-2">{{ log.notes }}</p>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <!-- Details Modal - Now using our new EmotionLogDetails component -->
-<div *ngIf="isDetailsModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div *ngIf="isDetailsModalOpen" class="modal-overlay">
   <app-emotion-log-details
     [logs]="selectedLogs"
     [emotionTitle]="selectedPattern?.emotion || ''"

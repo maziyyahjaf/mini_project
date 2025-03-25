@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User } from "@angular/fire/auth";
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from "@angular/fire/auth";
 import { BehaviorSubject, from, lastValueFrom, map, Observable } from "rxjs";
 import { UserLoginPayload, UserRegistrationPayload } from "../models/user.model";
 import { ApiResponse, LoginResponse, SuccessfulRegistrationResponse } from "../models/api-response.model";
@@ -94,5 +94,9 @@ export class AuthService {
                 throw new Error("Login failed.");
             }
         }
+    }
+
+    logout(): Promise<void> {
+        return signOut(this.firebaseAuth);
     }
 }

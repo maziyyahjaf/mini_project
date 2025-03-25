@@ -1,18 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { EmotionLog, EmotionLogResponse, EmotionWeeklyPattern } from '../../models/emotion.model';
 import { EmotionInsightsService } from '../../services/emotion-insights.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-weekly-pattern',
   standalone: false,
   templateUrl: './weekly-pattern.component.html',
-  styleUrl: './weekly-pattern.component.css'
+  styleUrl: './weekly-pattern.component.css',
 })
 export class WeeklyPatternComponent implements OnInit{
   
   weeklyPatterns: EmotionWeeklyPattern[] = [];
   selectedLogs: EmotionLogResponse[] = [];
   selectedPattern: EmotionWeeklyPattern | null = null;
+
   isDetailsModalOpen = false;
   isLoading = true;
   error: string | null = null;
@@ -116,19 +118,20 @@ export class WeeklyPatternComponent implements OnInit{
   // Helper for getting emotion color classes
   getEmotionColorClass(emotion: string): string {
     // Map emotions to Tailwind color classes
-    const emotionColors: { [key: string]: string } = {
-      'happy': 'bg-yellow-200',
-      'sad': 'bg-indigo-200',
-      'anxious': 'bg-orange-200',
-      'stressed': 'bg-red-200',
-      'calm': 'bg-blue-200',
-      'excited': 'bg-green-200',
-      'love': 'bg-magenta-200',
-      'longing': 'bg-pink-200'
-      // Add more emotions as needed
-    };
+    // const emotionColors: { [key: string]: string } = {
+    //   'happy': 'bg-yellow-200',
+    //   'sad': 'bg-indigo-200',
+    //   'anxious': 'bg-orange-200',
+    //   'stressed': 'bg-red-200',
+    //   'calm': 'bg-blue-200',
+    //   'excited': 'bg-green-200',
+    //   'love': 'bg-rose-200',
+    //   'longing': 'bg-pink-200'
+    //   // Add more emotions as needed
+    // };
     
-    return emotionColors[emotion.toLowerCase()] || 'bg-gray-200';
+    // return emotionColors[emotion.toLowerCase()] || 'bg-gray-200';
+    return emotion.toLowerCase();
   }
 
   // Get the total frequency for a day
@@ -140,6 +143,20 @@ export class WeeklyPatternComponent implements OnInit{
   onLogUpdated(updatedLog: EmotionLogResponse): void {
     // Refresh weekly patterns to reflect any changes
     this.loadWeeklyPatterns();
+  }
+
+  getEmojiForEmotion(emotion: string): string {
+    const map: Record<string, string> = {
+      happy: '😊',
+      excited: '🤩',
+      calm: '😌',
+      love: '🥰',
+      longing: '🥺',
+      sad: '😢',
+      anxious: '😰',
+      stressed: '😖',
+    };
+    return map[emotion.toLowerCase()] || '🌈';
   }
 
   

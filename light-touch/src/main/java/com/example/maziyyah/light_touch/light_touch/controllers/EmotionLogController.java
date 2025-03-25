@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,7 +127,7 @@ public class EmotionLogController {
             dto.setEmotionLogId(emotionLog.getEmotionLogId());
             dto.setEmotion(emotionLog.getEmotion());
             dto.setIntensity(emotionLog.getIntensity());
-            // need to get timezone for user..
+            // need to get timezone for user.. not changing the time
             String timezone = emotionLogService.fetchUserTimezone(firebaseUid);
             Instant instant = Instant.parse(emotionLog.getTimestamp());
             LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.of(timezone));
@@ -144,5 +145,27 @@ public class EmotionLogController {
         }
 
     }
+
+    @DeleteMapping(path = "/log/{logId}")
+    public ResponseEntity<?> deleteLog(@PathVariable("logId") int logId) {
+        // Retrieve the authenticated user's Firebase UID
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String firebaseUid = (String) authentication.getPrincipal();
+        logger.info("Authenticated user UID: {}", firebaseUid);
+        logger.info("Authenticated User in delete logEmotion: {}", authentication.getPrincipal());
+        logger.info("User Authorities in delete logEmotion: {}", authentication.getAuthorities());
+
+        try{
+            emotionLogService.deleteLog(firebaseUid, logId);
+
+            return ResponseEntity.ok().body(new ApiResponse("success", String.format("deleted log %s ", logId)));
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse("fail", "Failed to delete emotion log: " + ex.getMessage()));
+        }
+    }
     
+
+
 }

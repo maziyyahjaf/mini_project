@@ -56,55 +56,94 @@ export class EmotionLogDetailsComponent implements OnInit {
     });
   }
 
-  getEmotionIntensityStyle(
-    emotion: string,
-    intensity: number
-  ): { [key: string]: string } {
+  getEmotionIntensityStyle(emotion: string,intensity: number, context: 'log-card' | 'picker' = 'log-card'): { [key: string]: string } {
     // default intensity if not provided
     intensity = intensity || 3;
 
-    // map emotions to base colors
-    // need to adjust to iot color mapping eventually
-    // Map emotions to base colors with HSL values for easier manipulation
     const emotionBaseColors: { [key: string]: string } = {
-      happy: 'hsl(50, 100%, 50%)', // Yellow
-      excited: 'hsl(120, 100%, 35%)', // Green
-      calm: 'hsl(210, 100%, 50%)', // Blue
-      love: 'hsl(330, 100%, 70%)', // Pink/Magenta
-      longing: 'hsl(300, 100%, 70%)', // Purple/Pink
-      sad: 'hsl(240, 70%, 60%)', // Indigo
-      anxious: 'hsl(30, 100%, 50%)', // Orange
-      stressed: 'hsl(0, 100%, 50%)', // Red
-      default: 'hsl(0, 0%, 75%)', // Gray
+      happy: '50, 100%', // Yellow
+      excited: '120, 100%', // Green
+      calm: '210, 100%', // Blue
+      love: '330, 100%', // Pink
+      longing: '300, 100%', // lavendar
+      sad: '240, 70%', // Indigo
+      anxious: '30, 100%', // Orange
+      stressed: '0, 100%', // Red
+      default: '0, 0%', // Gray
     };
 
     // Adjust lightness based on intensity (1-5)
     // Lower intensity = lighter color, Higher intensity = darker color
-    const baseLightness = 90; // Start with a very light base
-    const lightnessAdjustment = intensity * 12; // 12% darker per intensity level
+    const base = emotionBaseColors[emotion.toLowerCase()] || emotionBaseColors['default'];
+    const lightness = 95;
+    // const baseLightness = 90; // Start with a very light base
+    // const lightnessAdjustment = intensity * 12; // 12% darker per intensity level
+    const hsl = `hsl(${base}, ${lightness}%)`;
+
+    if (context === 'picker') {
+      const hoverLightness = Math.max(60, 95 - intensity * 6);
+    return {
+        'background-color': `hsl(${base}, ${hoverLightness}%)`,
+        'border': '2px solid transparent',
+        'transition': 'all 0.2s ease',
+        'color': '#333'
+      };
+    }
 
     // get the base color for this emotion
-    const baseColor =
-      emotionBaseColors[emotion.toLowerCase()] || emotionBaseColors['default'];
-    let hsl = baseColor;
+    // const baseColor =
+    //   emotionBaseColors[emotion.toLowerCase()] || emotionBaseColors['default'];
+    // let hsl = baseColor;
+    const border = intensity >=4 ? `2px solid hsl(${base}, 45%)` : '2px solid transparent';
 
-    if (baseColor.startsWith('hsl')) {
-      // Parse the HSL values
-      const hslMatch = baseColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-      if (hslMatch) {
-        const h = hslMatch[1];
-        const s = hslMatch[2];
-        const l = Math.max(20, baseLightness - lightnessAdjustment); // Ensure not too dark
-        hsl = `hsl(${h}, ${s}%, ${l}%)`;
-      }
-    }
+    // if (baseColor.startsWith('hsl')) {
+    //   // Parse the HSL values
+    //   const hslMatch = baseColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    //   if (hslMatch) {
+    //     const h = hslMatch[1];
+    //     const s = hslMatch[2];
+    //     const l = Math.max(20, baseLightness - lightnessAdjustment); // Ensure not too dark
+    //     hsl = `hsl(${h}, ${s}%, ${l}%)`;
+    //   }
+    // }
 
     // Return as a style object to be bound with [ngStyle]
     return {
       'background-color': hsl,
-      color: intensity > 3 ? 'white' : 'black', // Text color adjustment for readability
-      transition: 'background-color 0.3s ease', // Smooth transition for hover effects
+      // color: intensity > 3 ? 'white' : 'black', // Text color adjustment for readability
+      'border': border,
+      'color': '#333',
+      'transition': 'background-color 0.3s ease', // Smooth transition for hover effects
     };
+  }
+
+  getLogCardStyle(emotion: string, intensity: number) {
+    return this.getEmotionIntensityStyle(emotion, intensity, 'log-card');
+  }
+  
+  getPickerStyle(emotion: string, intensity: number) {
+    return this.getEmotionIntensityStyle(emotion, intensity, 'picker');
+  }
+
+  getEmotionHsl(emotion: string, intensity: number): string {
+    const baseColors: { [key: string]: string } = {
+      happy: '50, 100%',
+      excited: '120, 100%',
+      calm: '210, 100%',
+      love: '330, 100%',
+      longing: '300, 100%',
+      sad: '240, 70%',
+      anxious: '30, 100%',
+      stressed: '0, 100%',
+      default: '0, 0%',
+    };
+    const base = baseColors[emotion.toLowerCase()] || baseColors['default'];
+    const lightness = 90 - (intensity * 6); // adjust darkness
+    return `hsl(${base}, ${lightness}%)`;
+  }
+
+  getIntensityLabel(value: number): string {
+    return ['Gentle', 'Light', 'Moderate', 'Strong', 'Intense'][value - 1] || '';
   }
 
   // start editing a log

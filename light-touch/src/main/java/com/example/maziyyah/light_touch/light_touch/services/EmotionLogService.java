@@ -98,6 +98,10 @@ public class EmotionLogService {
         return emotionLogrepository.fetchUserTimeZone(firebaseUid);
     }
 
+    public void deleteLog(String firebaseUid, int logId) {
+        emotionLogrepository.deleteLog(firebaseUid, logId);
+    }
+
 
     
 

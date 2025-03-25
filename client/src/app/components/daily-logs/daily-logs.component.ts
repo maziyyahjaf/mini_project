@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { EmotionLogResponse } from '../../models/emotion.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmotionInsightsService } from '../../services/emotion-insights.service';
+import { EmotionLogService } from '../../services/emotion-log.service';
 
 @Component({
   selector: 'app-daily-logs',
@@ -10,9 +11,7 @@ import { EmotionInsightsService } from '../../services/emotion-insights.service'
   styleUrl: './daily-logs.component.css'
 })
 export class DailyLogsComponent implements OnInit {
-deleteLog(arg0: number) {
-throw new Error('Method not implemented.');
-}
+
   
   todaysLogs: EmotionLogResponse[] = [];
   router = inject(Router);
@@ -23,6 +22,7 @@ throw new Error('Method not implemented.');
   moodEmoji: string = '';
 
   insightsService = inject(EmotionInsightsService);
+  emotionLogService = inject(EmotionLogService);
   
   ngOnInit(): void {
     this.route.queryParams.subscribe(queryParams => {
@@ -54,6 +54,23 @@ throw new Error('Method not implemented.');
       stressed: '😖',
     };
     return map[emotion.toLowerCase()] || '🌈';
+  }
+
+  deleteLog(logId: number) {
+    this.emotionLogService.deleteEmotionLog(logId).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.todaysLogs = this.todaysLogs.filter(log => log.emotionLogId !== logId);
+
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  wasSentToDevice(log: EmotionLogResponse): boolean {
+    return !!log.sendToDevice;
   }
 
   

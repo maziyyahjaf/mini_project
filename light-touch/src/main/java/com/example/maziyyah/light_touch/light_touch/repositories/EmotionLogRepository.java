@@ -121,6 +121,18 @@ public class EmotionLogRepository {
     }
 
     // get logs by date?
+
+    public void deleteLog(String firebaseUid, int logId) {
+        String sql = "DELETE FROM emotion_logs WHERE firebase_user_id = ? AND log_id = ?";
+
+        try {
+            jdbcTemplate.update(sql, firebaseUid, logId);
+        } catch (DataAccessException ex) {
+            logger.error("SQL Error: {} - {}", ex.getMessage(), ex.getCause());
+            logger.error("Error deleting log from MySQL for user: {}", firebaseUid, ex);
+            throw new RuntimeException("Database error: Unable to delete log.");
+        }
+    }
     
 }
 

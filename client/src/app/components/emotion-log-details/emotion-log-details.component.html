@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+<div class="modal-wrapper">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-bold">
@@ -19,42 +19,41 @@
     
     <!-- Log entries -->
     <div *ngIf="logs.length > 0" class="space-y-4">
-      <div *ngFor="let log of logs" class="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div *ngFor="let log of logs" class="log-card" (click)="editLog(log)">
         <div 
-          [ngStyle]="getEmotionIntensityStyle(log.emotion, log.intensity)" 
-          class="p-3 flex justify-between items-center cursor-pointer"
-          (click)="editLog(log)">
+          [ngStyle]="getLogCardStyle(log.emotion, log.intensity)" 
+          class="log-card-header">
           
-          <div class="flex items-center">
-            <span class="font-medium">{{ log.emotion }}</span>
-            <span class="ml-2 px-2 py-1 bg-white bg-opacity-30 rounded text-sm">
-              Intensity: {{ log.intensity }}/5
-            </span>
+          <div class="emotion-info">
+            <span class="emotion-name">{{ log.emotion }}</span>
+            <div class="intensity-bar">
+              <div class="intensity-fill" [style.width.%]="(log.intensity /5) * 100"></div>
+
+            </div>
           </div>
           
-          <div class="flex items-center">
-            <span class="text-sm mr-2">
+          <div class="timestamp-group">
+            <span class="timestamp">
               {{ log.timestamp | date:'MMM d, y h:mm a' }}
             </span>
-            <button class="p-1 rounded hover:bg-white hover:bg-opacity-20">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
+            <button class="edit-icon" (click)="editLog(log); $event.stopPropagation()">
+              ✏️
             </button>
           </div>
         </div>
         
-        <div *ngIf="log.notes" class="p-3 bg-white">
-          <p class="text-gray-700">{{ log.notes }}</p>
+        <div *ngIf="log.notes" class="log-notes">
+          <p>{{ log.notes }}</p>
         </div>
       </div>
     </div>
   </div>
   
   <!-- Edit Modal -->
-  <div *ngIf="isEditModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div *ngIf="isEditModalOpen" class="modal-overlay">
     <div class="bg-white rounded-lg p-6 max-w-md w-full">
       <div class="flex justify-between items-center mb-4">
+       
         <h3 class="text-lg font-bold">Edit Emotion Log</h3>
         <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700">
           <span class="sr-only">Close</span>
@@ -64,26 +63,15 @@
         </button>
       </div>
 
-      <pre>{{editForm.value | json}}</pre>
+      <!-- <pre>{{editForm.value | json}}</pre> -->
       
       <form [formGroup]="editForm" (ngSubmit)="saveEditedLog()" class="space-y-4">
-        <!-- Emotion Dropdown -->
-        <!-- <div>
-          <label for="emotion" class="block text-sm font-medium text-gray-700 mb-1">Emotion</label>
-          <select 
-            id="emotion" 
-            formControlName="emotion"
-            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <option *ngFor="let emotion of availableEmotions" [value]="emotion">{{ emotion }}</option>
-          </select>
-        </div> -->
-
         <div class="emotions-container">
           @for(emotion of emotions$ | async; track emotion.displayOrder) {
             <div 
               class="emotion-item"
               [class.selected]="isEmotionSelected(emotion.emotionName)"
-              [ngStyle]="getEmotionIntensityStyle(emotion.emotionName, editForm.get('intensity')?.value || 3)"
+              [style.--emotion-color]="getEmotionHsl(emotion.emotionName, editForm.get('intensity')?.value || 3)"
               (click)="selectEmotion(emotion.emotionName)">
               <span class="emoji">{{ emotion.emotionIconReference }}</span>
               <span>{{ emotion.emotionName }}</span>
@@ -92,10 +80,10 @@
         </div>
         
         <!-- Intensity Slider -->
-        <div>
-          <label for="intensity" class="block text-sm font-medium text-gray-700 mb-1">
-            Intensity: {{ editForm.get('intensity')?.value }}/5
-          </label>
+        <div class="intensity-label">
+          <!-- <label for="intensity" class="block text-sm font-medium text-gray-700 mb-1"> -->
+            Intensity: {{ editForm.get('intensity')?.value || 3}}
+          <!-- </label> -->
           <input 
             type="range" 
             id="intensity" 
@@ -106,23 +94,19 @@
             class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
         </div>
 
-        <div class="flex items-center justify-between py-2">
-          <label for="sendToDevice" class="block text-sm font-medium text-gray-700">Send to device</label>
-          <button 
-            type="button" 
-            role="switch"
-            [attr.aria-checked]="editForm.get('sendToDevice')?.value"
-            (click)="toggleSendToDevice()"
-            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            [ngClass]="editForm.get('sendToDevice')?.value ? 'bg-indigo-600' : 'bg-gray-200'">
-            <span class="sr-only">Send to device</span>
-            <span 
-              aria-hidden="true" 
-              class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-              [ngClass]="editForm.get('sendToDevice')?.value ? 'translate-x-5' : 'translate-x-0'">
-            </span>
-          </button>
+        <div class="toggle-row">
+          <label class="toggle-label">  
+            {{ editForm.get('sendToDevice')?.value ? '💡 Device will light up' : '🌙 Not sending to device' }}
+          </label>
+          <div class="toggle-switch" 
+               [class.active]="editForm.get('sendToDevice')?.value"
+               (click)="toggleSendToDevice()"
+               role="switch"
+               [attr.aria-checked]="editForm.get('sendToDevice')?.value"
+               tabindex="0">
+          </div>
         </div>
+        
         
         <!-- Notes Textarea -->
         <div>
@@ -136,17 +120,17 @@
         </div>
         
         <!-- Form Actions -->
-        <div class="flex justify-end space-x-2 pt-2">
+        <div class="action-buttons">
           <button 
             type="button"
             (click)="cancelEdit()"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            class="btn-outline">
             Cancel
           </button>
           <button 
             type="submit"
             [disabled]="!editForm.valid"
-            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+            class="btn-primary">
             Save
           </button>
         </div>
