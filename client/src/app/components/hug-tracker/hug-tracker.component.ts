@@ -69,6 +69,12 @@ export class HugTrackerComponent implements OnInit {
 
   }
 
+  get formattedHugLabel(): string {
+    if (this.hugCount === 0) return 'No hugs yet today 💭';
+    if (this.hugCount === 1) return '1 shared hug 💞';
+    return `${this.hugCount} shared hugs 💞`;
+  }
+
   fetchDailyHugCount() {
     const subscription = this.hugCountService.getDailyHugCount(this.pairingId!).subscribe({
       next: (response) => {

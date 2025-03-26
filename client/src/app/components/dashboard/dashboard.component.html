@@ -3,24 +3,26 @@
   <!-- 1. Greeting & Mood -->
   <section class="dashboard-top">
     <h2 class="greeting">Hi, {{ userName | titlecase }} 👋</h2>
-    <div class="center aura" [ngClass]="auraClass" *ngIf="snapshot?.latestEmotionLog as mood">
-      <div class="emoji" [ngClass]="mood.emotion">{{ moodEmoji }}</div>
-      <div class="mood-text">You’ve been feeling {{ mood.emotion }}</div>
-      <div class="time-text">{{ moodRelativeTime }}</div>
+    <div class="dashboard-center-wrapper">
+      <div class="center aura" [ngClass]="auraClass" *ngIf="snapshot?.latestEmotionLog as mood">
+        <div class="emoji" [ngClass]="mood.emotion">{{ moodEmoji }}</div>
+        <div class="mood-text">You’ve been feeling {{ mood.emotion }}</div>
+        <div class="time-text">{{ moodRelativeTime }}</div>
+      </div>
     </div>
   </section>
 
   <!-- 2. Action Buttons -->
   <!-- <section class="dashboard-actions-wrapper"> -->
-    <div class="dashboard-actions">
-      <button class="action-button" (click)="sendHug()">🤗 Send a Hug</button>
-      <button class="action-button" routerLink="/log">📝 Log a Feeling</button>
-      <button class="action-button" (click)="router.navigate(['/insights'])"> 📊 View Weekly Insights</button>
-    </div>
+  <div class="dashboard-actions">
+    <button class="action-button" (click)="sendHug()">🤗 Send a Hug</button>
+    <button class="action-button" routerLink="/log">📝 Log a Feeling</button>
+    <button class="action-button" (click)="router.navigate(['/insights'])"> 📊 View Weekly Insights</button>
+  </div>
 
-    <div class="hug-feedback" *ngIf="hugStatusMessage">
-      {{ hugStatusMessage }}
-    </div>
+  <div class="hug-feedback" *ngIf="hugStatusMessage">
+    {{ hugStatusMessage }}
+  </div>
   <!-- </section> -->
 
   <section class="connection-wrapper">
@@ -28,10 +30,10 @@
     <app-hug-tracker (hugUpdated)="refreshLastHugTime()"></app-hug-tracker>
     <div class="partner-status" *ngIf="snapshot?.hugInteraction">
       <div *ngIf="lastHugTime as hugTime; else noHugs">
-        💞 Hugged {{ getRelativeTime(hugTime) }}
+        💞 Last shared hug: {{ getRelativeTime(hugTime) }}
       </div>
       <ng-template #noHugs>
-        🤗 No hugs yet today
+        🤗No synced hugs just yet — maybe later today 💞
       </ng-template>
 
       <div *ngIf="snapshot.partnerEmotion; else noPartner">

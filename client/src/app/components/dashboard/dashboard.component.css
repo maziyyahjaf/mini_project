@@ -13,6 +13,12 @@
     min-height: 100vh;
   }
 
+  .dashboard-center-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
 /* Aura base class */
 .aura {
     border: 8px solid transparent;
@@ -30,14 +36,7 @@
     .aura-longing  { border-color: #ffa3a5; box-shadow: 0 0 30px rgba(255, 163, 165, 0.55); }
     .aura-anxious  { border-color: #ff3d00; box-shadow: 0 0 30px rgba(255, 61, 0, 0.55); }
     .aura-neutral  { border-color: #d3cce3; box-shadow: 0 0 20px rgba(211, 204, 227, 0.5); }
-  /* .aura-happy    { border-color: #fbd786; box-shadow: 0 0 30px #fbd78688; }
-  .aura-sad      { border-color: #667db6; box-shadow: 0 0 30px #667db688; }
-  .aura-angry    { border-color: #e52d27; box-shadow: 0 0 30px #e52d2788; }
-  .aura-calm     { border-color: #8DC26F; box-shadow: 0 0 30px #8DC26F88; }
-  .aura-tired    { border-color: #614385; box-shadow: 0 0 30px #61438588; }
-  .aura-anxious  { border-color: #6c5b7b; box-shadow: 0 0 30px #6c5b7b88; }
-  .aura-neutral  { border-color: #d3cce3; box-shadow: 0 0 20px #d3cce388; }
-   */
+
   /* Centered Mood Bubble */
   .center {
     /* position: absolute;
@@ -106,30 +105,7 @@
     gap: 1.5rem;
   }
   
-  .hug-button, .log-button {
-    /* padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 1.5rem;
-    border: none;
-    background-color: #ffedf0;
-    cursor: pointer;
-    transition: all 0.3s ease; */
-    /* background-color: #ffeaf1;
-    color: #222;
-    padding: 0.75rem 1.5rem;
-    border-radius: 2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, background-color 0.3s ease; */
-  }
   
-  .hug-button:hover, .log-button:hover {
-    /* background-color: #ffe4ea; */
-    /* transform: scale(1.05);
-    background-color: #ffd9e6; */
-  }
   
 
   
@@ -141,38 +117,7 @@
     color: #4b5563;
   }
   
-  /* .hug-feedback {
-    font-size: 2.5rem;
-    animation: floatHug 1.5s ease-in-out forwards;
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-  }
-  
-  @keyframes floatHug {
-    0% { transform: translate(-50%, 0); opacity: 1; }
-    100% { transform: translate(-50%, -50px); opacity: 0; }
-  } */
-  
-  /* .insights-button {
-    margin-top: 16px;
-    padding: 10px 20px;
-    background-color: #d2edf3;
-    color: #2a4e57;
-    border: none;
-    border-radius: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: background-color 0.2s ease;
-  }
-  
-  .insights-button:hover {
-    background-color: #bee2ec;
-  } */
+ 
   
 
   .dashboard-card {
