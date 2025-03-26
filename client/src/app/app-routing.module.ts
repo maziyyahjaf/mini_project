@@ -9,6 +9,7 @@ import { EmotionLogComponent } from './components/emotion-log/emotion-log.compon
 import { WeeklyPatternComponent } from './components/weekly-pattern/weekly-pattern.component';
 import { DailyLogsComponent } from './components/daily-logs/daily-logs.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 
 const routes: Routes = [
   {path: "", component: RegisterComponent},
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: "insights", component: WeeklyPatternComponent},
   {path: "daily-logs", component: DailyLogsComponent},
   {path: "dashboard", component: DashboardComponent},
-  {path: "**", component: AppComponent}
+  {path: "settings", component: UserSettingsComponent},
+  {path: "**", component: RegisterComponent}
 ];
 
 @NgModule({

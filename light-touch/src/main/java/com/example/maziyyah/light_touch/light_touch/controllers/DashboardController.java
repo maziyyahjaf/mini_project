@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.maziyyah.light_touch.light_touch.models.DashboardSnapshotDTO;
-import com.example.maziyyah.light_touch.light_touch.models.HugInteractionDTO;
+// import com.example.maziyyah.light_touch.light_touch.models.HugInteractionDTO;
 import com.example.maziyyah.light_touch.light_touch.services.DashboardService;
 
 @RestController

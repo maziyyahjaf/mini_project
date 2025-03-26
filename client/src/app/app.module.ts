@@ -25,6 +25,7 @@ import { EmotionBubbleComponent } from './components/emotion-bubble/emotion-bubb
 import { PartnerStatusComponent } from './components/partner-status/partner-status.component';
 import { FloatingPromptComponent } from './components/floating-prompt/floating-prompt.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 
 
 // firebase initialization function
@@ -52,7 +53,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AmbientBackgroundComponent,
     EmotionBubbleComponent,
     PartnerStatusComponent,
-    FloatingPromptComponent
+    FloatingPromptComponent,
+    UserSettingsComponent
   ],
   imports: [
     BrowserModule,

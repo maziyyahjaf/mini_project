@@ -17,3 +17,9 @@ export interface UserLoginPayload {
     timezone: string;
     pairing_id: string;
 }
+
+export interface UserSettings {
+    pairingStatus: boolean;
+    telegramChatId: string | null;
+    telegramLinkCode: string | null;
+}

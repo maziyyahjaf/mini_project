@@ -1,9 +1,16 @@
 .dashboard-wrapper {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem 1rem;
-    gap: 1.5rem;
+    gap: 1.5rem; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1rem;
+    gap: 2.5rem;
+    background: linear-gradient(to bottom right, #fffaf4, #f2f9ff);
+    min-height: 100vh;
   }
 
 /* Aura base class */
@@ -45,7 +52,7 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     max-width: 320px;
     width: 90%;
-    font-family: 'Comfortaa', cursive;
+    font-family: 'Poppins', cursive;
   }
   
   /* Mood Emoji */
@@ -62,8 +69,10 @@
   /* Text Styling */
   .mood-text {
     font-size: 1.25rem;
-    margin-top: 1rem;
-    color: #333;
+    /* margin-top: 1rem; */
+    /* color: #333; */
+    font-weight: 500;
+    color: #1f2937;
   }
   
   .time-text {
@@ -80,38 +89,49 @@
   }
 
   .greeting {
+    /* margin-top: 2rem; */
+    font-size: 2rem;
     text-align: center;
-    font-size: 1.5rem;
-    margin-top: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: #2e2e2e;
+    color: #1f2937;
+    font-family: 'Poppins', sans-serif;
   }
   
   .dashboard-actions {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     display: flex;
     justify-content: center;
     gap: 1.5rem;
   }
   
   .hug-button, .log-button {
-    padding: 0.75rem 1.5rem;
+    /* padding: 0.75rem 1.5rem;
     font-size: 1rem;
     border-radius: 1.5rem;
     border: none;
     background-color: #ffedf0;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; */
+    /* background-color: #ffeaf1;
+    color: #222;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, background-color 0.3s ease; */
   }
   
   .hug-button:hover, .log-button:hover {
-    background-color: #ffe4ea;
+    /* background-color: #ffe4ea; */
+    /* transform: scale(1.05);
+    background-color: #ffd9e6; */
   }
   
-  .partner-status {
-    margin-top: 2.5rem;
-    text-align: center;
-    font-size: 1rem;
-    color: #444;
-  }
+
   
   .hug-feedback {
     margin-top: 1rem;
@@ -136,7 +156,7 @@
     100% { transform: translate(-50%, -50px); opacity: 0; }
   } */
   
-  .insights-button {
+  /* .insights-button {
     margin-top: 16px;
     padding: 10px 20px;
     background-color: #d2edf3;
@@ -152,5 +172,127 @@
   
   .insights-button:hover {
     background-color: #bee2ec;
-  }
+  } */
   
+
+  .dashboard-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 400px;
+  }
+  .sub-heading {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #666;
+  }
+
+  @keyframes float-subtle {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+
+.emoji.calm,
+.emoji.sad,
+.emoji.anxious,
+.emoji.stressed,
+.emoji.longing {
+  animation: float-subtle 7s ease-in-out infinite;
+  transform: translateY(0);
+  opacity: 0.9;
+}
+
+.emoji.excited,
+.emoji.happy,
+.emoji.love {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Action Buttons */
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.action-button {
+  padding: 0.65rem 1.25rem;
+  background-color: #fff0f5;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+/* Connection Status */
+.connection-wrapper {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem; */
+
+  background: #ffffffdd;
+  padding: 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Partner Status */
+.partner-status {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #444;
+  max-width: 300px;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: #ffffffaa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+
+
+/* Footer */
+.dashboard-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: #666;
+}
+.dashboard-footer button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+.dashboard-footer button:hover {
+  color: #111;
+}
+
+.section-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: -1rem;
+  text-align: center;
+  font-family: 'Poppins';
+  text-transform: uppercase;
+}

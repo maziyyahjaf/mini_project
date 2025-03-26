@@ -1,0 +1,88 @@
+.user-settings-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: #fffefc;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+  
+  .user-settings-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+    font-weight: 600;
+    color: #553c9a; /* soft purple vibe */
+  }
+  
+  .setting-item {
+    background: #fdfaf6;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.3s ease;
+  }
+  
+  .setting-item h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #444;
+  }
+  
+  .setting-item p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 6px 0;
+    color: #555;
+  }
+  
+  .link-telegram-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background-color: #e0d9fc;
+    color: #4c1d95;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .link-telegram-btn:hover {
+    background-color: #d6ccfa;
+    transform: translateY(-1px);
+  }
+  
+  .link-telegram-btn:active {
+    transform: translateY(1px);
+  }
+  
+
+
+
+
+
+
+
+
+
+
+/* .link-telegram-btn {
+    background-color: #8b5cf6;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  
+  .link-telegram-btn:hover {
+    background-color: #7c3aed;
+  } */
