@@ -1,5 +1,8 @@
+
+
 .user-settings-container {
     max-width: 600px;
+    margin-top:3rem;
     margin: 40px auto;
     padding: 24px;
     background-color: #fffefc;
@@ -8,13 +11,16 @@
     font-family: 'Poppins', sans-serif;
     color: #333;
     transition: all 0.3s ease;
+  
   }
   
   .user-settings-container h2 {
-    font-size: 1.75rem;
-    margin-bottom: 24px;
-    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
     color: #553c9a; /* soft purple vibe */
+    text-align: center;
+    letter-spacing: -0.5px;
   }
   
   .setting-item {
@@ -27,14 +33,15 @@
   }
   
   .setting-item h3 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #444;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+    letter-spacing: 0.2px;
   }
   
   .setting-item p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.5;
     margin: 6px 0;
     color: #555;
@@ -60,6 +67,47 @@
   
   .link-telegram-btn:active {
     transform: translateY(1px);
+  }
+  
+
+  .setting-item p span.emoji {
+    display: inline-block;
+    animation: emojiPulse 3s ease-in-out infinite;
+  }
+  
+  @keyframes emojiPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s ease-out both;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .loader-container {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    color: #6b7280;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ddd;
+    border-top: 4px solid #7c3aed;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   
 

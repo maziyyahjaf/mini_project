@@ -42,6 +42,9 @@ export class EmotionLogDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.editForm = this.createEditForm();
+    console.log('Child received logs:', this.logs);
+    console.log('Child received emotionTitle:', this.emotionTitle);
+    console.log('Child received dayOfWeek:', this.dayOfWeek);
   }
 
   createEditForm(): FormGroup {

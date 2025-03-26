@@ -94,6 +94,7 @@ export class WeeklyPatternComponent implements OnInit{
   }
 
   showDetails(pattern: EmotionWeeklyPattern): void {
+    this.selectedPattern = pattern;
     if (!pattern.logIds || pattern.logIds.length === 0) {
       this.selectedLogs = [];
       return;

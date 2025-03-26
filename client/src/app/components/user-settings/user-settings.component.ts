@@ -13,12 +13,14 @@ export class UserSettingsComponent implements OnInit {
 
   userSettingsService = inject(UserSettingsService);
   userSettings!: UserSettings;
+  isLoading = true;
 
   ngOnInit(): void {
     this.userSettingsService.fetchUserSettings().subscribe({
       next: (data) => {
         this.userSettings = data;
         console.log(data);
+        this.isLoading = false;
       },
       error: (err) => {
         console.log(err);

@@ -1,16 +1,23 @@
-<div class="user-settings-container">
-    <h2>User Settings</h2>
+<div *ngIf="isLoading" class="loader-container">
+  <div class="spinner"></div>
+  <p>Loading your settings…</p>
+</div>
+
+
+
+<div *ngIf="!isLoading" class="user-settings-container">
+    <h2 class="fade-in">User Settings</h2>
   
     <!-- Telegram linking status -->
     <div class="setting-item">
       <h3>Telegram</h3>
       
-      <div *ngIf="userSettings.telegramChatId; else notLinked">
-        <p>✅ Your Telegram is linked.</p>
+      <div *ngIf="userSettings?.telegramChatId; else notLinked">
+        <p><span class="emoji">✅</span> Telegram is linked — all set!</p>
       </div>
   
       <ng-template #notLinked>
-        <p>🔗 Telegram not linked.</p>
+        <p><span class="emoji">🚫</span>Not linked yet. Tap below to connect Telegram 💬</p>
         <a 
           class="link-telegram-btn"
           [href]="'https://t.me/toy_hugs_bot?start=' + userSettings.telegramLinkCode"
@@ -23,7 +30,7 @@
   
     <!-- Partner pairing -->
     <div class="setting-item">
-      <h3>Partner</h3>
+      <h3>Partner Pairing Status</h3>
       <p>
         {{ userSettings.pairingStatus ? '💞 You are paired with your partner.' : '😶 Not paired yet.' }}
       </p>
