@@ -36,3 +36,7 @@ build/
 private-key.json
 **/src/main/resources/private-key.json
 light-touch/src/main/resources/private-key.json
+
+
+.DS_Store
+arduino/.DS_Store
