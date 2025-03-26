@@ -35,3 +35,4 @@ build/
 # Firebase
 private-key.json
 **/src/main/resources/private-key.json
+light-touch/src/main/resources/private-key.json
